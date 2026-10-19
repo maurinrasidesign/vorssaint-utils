@@ -1,0 +1,80 @@
+▸ Compiling (release) against MacOSX.sdk…
+Sources/Vorssaint/Services/Pad/ClaudeHookBridge.swift:173:32: error: missing argument label 'where:' in call
+171 |               let hooks = settings["hooks"] as? [String: Any],
+172 |               let groups = hooks["PermissionRequest"] as? [[String: Any]] else { return false }
+173 |         return groups.contains(isOurs) && FileManager.default.isExecutableFile(atPath: scriptURL.path)
+    |                                `- error: missing argument label 'where:' in call
+174 |     }
+175 | 
+
+Sources/Vorssaint/Services/Pad/ClaudeHookBridge.swift:198:53: error: extra argument 'atomically' in call
+196 |         }
+197 |         let data = try JSONSerialization.data(withJSONObject: settings, options: [.prettyPrinted, .sortedKeys])
+198 |         try data.write(to: settingsURL, atomically: true)
+    |                                                     `- error: extra argument 'atomically' in call
+199 |     }
+200 | 
+Sources/Vorssaint/Services/Shelf/ShelfService.swift:1755:59: warning: non-sendable result type 'NSImage?' cannot be sent from nonisolated context in call to static method 'thumbnail(for:pointSize:)'; this is an error in the Swift 6 language mode
+1753 |             let decoded: NSImage?
+1754 |             switch kind {
+1755 |             case .image: decoded = await ImageThumbnailer.thumbnail(for: url, pointSize: size)
+     |                                                           `- warning: non-sendable result type 'NSImage?' cannot be sent from nonisolated context in call to static method 'thumbnail(for:pointSize:)'; this is an error in the Swift 6 language mode
+1756 |             case .video: decoded = await VideoThumbnailer.thumbnail(for: url, pointSize: size)
+--
+2 |     case none
+3 |     case some(Wrapped)
+Sources/Vorssaint/UI/Notch/PadInputField.swift:30:73: error: ambiguous use of 'greatestFiniteMagnitude'
+ 28 |         let layout = NSLayoutManager()
+ 29 |         storage.addLayoutManager(layout)
+ 30 |         let container = NSTextContainer(size: NSSize(width: 0, height: .greatestFiniteMagnitude))
+    |                                                                         `- error: ambiguous use of 'greatestFiniteMagnitude'
+ 31 |         container.widthTracksTextView = true
+ 32 |         container.lineFragmentPadding = Self.lineFragmentPadding
+
+CoreFoundation.CGFloat.greatestFiniteMagnitude:2:19: note: found this candidate in module 'CoreFoundation'
+1 | struct CGFloat {
+2 | public static var greatestFiniteMagnitude: CGFloat { get }}
+  |                   `- note: found this candidate in module 'CoreFoundation'
+3 | 
+--
+3 | 
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:41:35: error: reference to member 'width' cannot be resolved without a contextual type
+ 39 |         view.isVerticallyResizable = true
+ 40 |         view.isHorizontallyResizable = false
+ 41 |         view.autoresizingMask = [.width]
+    |                                   `- error: reference to member 'width' cannot be resolved without a contextual type
+ 42 |         view.drawsBackground = false
+ 43 |         view.font = .systemFont(ofSize: fontSize)
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:43:22: error: cannot infer contextual base in reference to member 'systemFont'
+ 41 |         view.autoresizingMask = [.width]
+ 42 |         view.drawsBackground = false
+ 43 |         view.font = .systemFont(ofSize: fontSize)
+    |                      `- error: cannot infer contextual base in reference to member 'systemFont'
+ 44 |         view.textColor = .white
+ 45 |         view.insertionPointColor = .white
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:44:27: error: cannot infer contextual base in reference to member 'white'
+ 42 |         view.drawsBackground = false
+ 43 |         view.font = .systemFont(ofSize: fontSize)
+ 44 |         view.textColor = .white
+    |                           `- error: cannot infer contextual base in reference to member 'white'
+ 45 |         view.insertionPointColor = .white
+ 46 |         view.textContainerInset = Self.inset
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:45:37: error: cannot infer contextual base in reference to member 'white'
+ 43 |         view.font = .systemFont(ofSize: fontSize)
+ 44 |         view.textColor = .white
+ 45 |         view.insertionPointColor = .white
+    |                                     `- error: cannot infer contextual base in reference to member 'white'
+ 46 |         view.textContainerInset = Self.inset
+ 47 |         view.allowsUndo = true
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:61:40: error: reference to member 'fileURL' cannot be resolved without a contextual type
+ 59 |         view.delegate = context.coordinator
+ 60 |         view.coordinator = context.coordinator
+ 61 |         view.registerForDraggedTypes([.fileURL])
+    |                                        `- error: reference to member 'fileURL' cannot be resolved without a contextual type
+ 62 |         view.string = text
+ 63 |         context.coordinator.view = view

@@ -1,0 +1,40 @@
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:41:35: error: reference to member 'width' cannot be resolved without a contextual type
+ 39 |         view.isVerticallyResizable = true
+ 40 |         view.isHorizontallyResizable = false
+ 41 |         view.autoresizingMask = [.width]
+    |                                   `- error: reference to member 'width' cannot be resolved without a contextual type
+ 42 |         view.drawsBackground = false
+ 43 |         view.font = .systemFont(ofSize: fontSize)
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:43:22: error: cannot infer contextual base in reference to member 'systemFont'
+ 41 |         view.autoresizingMask = [.width]
+ 42 |         view.drawsBackground = false
+ 43 |         view.font = .systemFont(ofSize: fontSize)
+    |                      `- error: cannot infer contextual base in reference to member 'systemFont'
+ 44 |         view.textColor = .white
+ 45 |         view.insertionPointColor = .white
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:44:27: error: cannot infer contextual base in reference to member 'white'
+ 42 |         view.drawsBackground = false
+ 43 |         view.font = .systemFont(ofSize: fontSize)
+ 44 |         view.textColor = .white
+    |                           `- error: cannot infer contextual base in reference to member 'white'
+ 45 |         view.insertionPointColor = .white
+ 46 |         view.textContainerInset = Self.inset
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:45:37: error: cannot infer contextual base in reference to member 'white'
+ 43 |         view.font = .systemFont(ofSize: fontSize)
+ 44 |         view.textColor = .white
+ 45 |         view.insertionPointColor = .white
+    |                                     `- error: cannot infer contextual base in reference to member 'white'
+ 46 |         view.textContainerInset = Self.inset
+ 47 |         view.allowsUndo = true
+
+Sources/Vorssaint/UI/Notch/PadInputField.swift:61:40: error: reference to member 'fileURL' cannot be resolved without a contextual type
+ 59 |         view.delegate = context.coordinator
+ 60 |         view.coordinator = context.coordinator
+ 61 |         view.registerForDraggedTypes([.fileURL])
+    |                                        `- error: reference to member 'fileURL' cannot be resolved without a contextual type
+ 62 |         view.string = text
+ 63 |         context.coordinator.view = view

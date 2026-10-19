@@ -1,0 +1,16 @@
+2:Sources/Vorssaint/Services/Pad/ClaudeHookBridge.swift:173:32: error: missing argument label 'where:' in call
+6:    |                                `- error: missing argument label 'where:' in call
+10:Sources/Vorssaint/Services/Pad/ClaudeHookBridge.swift:198:53: error: extra argument 'atomically' in call
+14:    |                                                     `- error: extra argument 'atomically' in call
+70:Sources/Vorssaint/UI/Notch/PadInputField.swift:30:73: error: ambiguous use of 'greatestFiniteMagnitude'
+74:    |                                                                         `- error: ambiguous use of 'greatestFiniteMagnitude'
+90:Sources/Vorssaint/UI/Notch/PadInputField.swift:41:35: error: reference to member 'width' cannot be resolved without a contextual type
+94:    |                                   `- error: reference to member 'width' cannot be resolved without a contextual type
+98:Sources/Vorssaint/UI/Notch/PadInputField.swift:43:22: error: cannot infer contextual base in reference to member 'systemFont'
+102:    |                      `- error: cannot infer contextual base in reference to member 'systemFont'
+106:Sources/Vorssaint/UI/Notch/PadInputField.swift:44:27: error: cannot infer contextual base in reference to member 'white'
+110:    |                           `- error: cannot infer contextual base in reference to member 'white'
+114:Sources/Vorssaint/UI/Notch/PadInputField.swift:45:37: error: cannot infer contextual base in reference to member 'white'
+118:    |                                     `- error: cannot infer contextual base in reference to member 'white'
+122:Sources/Vorssaint/UI/Notch/PadInputField.swift:61:40: error: reference to member 'fileURL' cannot be resolved without a contextual type
+126:    |                                        `- error: reference to member 'fileURL' cannot be resolved without a contextual type
