@@ -117,7 +117,7 @@ func renderAppIcon(px: Int) -> Data? {
 // The mark is ~1.97:1, so fitting it into a fixed box made the width the
 // limiting side and left the height unused, rendering it far shorter than the
 // menu bar icons around it. Size from the height and let the width follow.
-let menuBarGlyphHeight: CGFloat = 12.5
+let menuBarGlyphHeight: CGFloat = 11
 // Centered geometrically the mark reads high, since the thin ring tails carry
 // the bounding box below the planet body. Drop it onto the same visual floor
 // as its neighbours.
