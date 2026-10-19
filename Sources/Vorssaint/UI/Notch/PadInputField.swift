@@ -19,7 +19,7 @@ struct PadInputField: NSViewRepresentable {
     static let inset = NSSize(width: 6, height: 6)
     static let lineFragmentPadding: CGFloat = 4
 
-    func makeCoordinator() -> Coordinator { Coordinator(self) }
+    func makeCoordinator() -> PadInputCoordinator { PadInputCoordinator(self) }
 
     func makeNSView(context: Context) -> NSScrollView {
         // TextKit 1 by hand: the subclass needs its own container, and the
@@ -27,22 +27,22 @@ struct PadInputField: NSViewRepresentable {
         let storage = NSTextStorage()
         let layout = NSLayoutManager()
         storage.addLayoutManager(layout)
-        let container = NSTextContainer(size: NSSize(width: 0, height: .greatestFiniteMagnitude))
+        let container = NSTextContainer(size: NSSize(width: 0, height: CGFloat.greatestFiniteMagnitude))
         container.widthTracksTextView = true
         container.lineFragmentPadding = Self.lineFragmentPadding
         layout.addTextContainer(container)
         context.coordinator.storage = storage
 
-        let view = PadTextView(frame: NSRect(x: 0, y: 0, width: 200, height: 24), textContainer: container)
+        let view: PadTextView = PadTextView(frame: NSRect(x: 0, y: 0, width: 200, height: 24), textContainer: container)
         view.minSize = NSSize(width: 0, height: 0)
         view.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
         view.isVerticallyResizable = true
         view.isHorizontallyResizable = false
-        view.autoresizingMask = [.width]
+        view.autoresizingMask = NSView.AutoresizingMask.width
         view.drawsBackground = false
-        view.font = .systemFont(ofSize: fontSize)
-        view.textColor = .white
-        view.insertionPointColor = .white
+        view.font = NSFont.systemFont(ofSize: fontSize)
+        view.textColor = NSColor.white
+        view.insertionPointColor = NSColor.white
         view.textContainerInset = Self.inset
         view.allowsUndo = true
         view.isRichText = false
@@ -56,9 +56,9 @@ struct PadInputField: NSViewRepresentable {
         view.isAutomaticDataDetectionEnabled = false
         view.smartInsertDeleteEnabled = false
         view.isContinuousSpellCheckingEnabled = false
-        view.delegate = context.coordinator
+        view.delegate = context.coordinator as NSTextViewDelegate
         view.coordinator = context.coordinator
-        view.registerForDraggedTypes([.fileURL])
+        view.registerForDraggedTypes([NSPasteboard.PasteboardType.fileURL])
         view.string = text
         context.coordinator.view = view
 
@@ -84,60 +84,60 @@ struct PadInputField: NSViewRepresentable {
             view.setSelectedRange(NSRange(location: location, length: 0))
         }
     }
+}
 
-    final class Coordinator: NSObject, NSTextViewDelegate {
-        var parent: PadInputField
-        weak var view: NSTextView?
-        var storage: NSTextStorage?
+final class PadInputCoordinator: NSObject, NSTextViewDelegate {
+    var parent: PadInputField
+    weak var view: NSTextView?
+    var storage: NSTextStorage?
 
-        init(_ parent: PadInputField) { self.parent = parent }
+    init(_ parent: PadInputField) { self.parent = parent }
 
-        func textDidChange(_ notification: Notification) {
-            guard let view else { return }
-            parent.text = view.string
-        }
-
-        func textView(_ textView: NSTextView, doCommandBy selector: Selector) -> Bool {
-            switch selector {
-            case #selector(NSResponder.insertNewline(_:)):
-                let flags = NSApp.currentEvent?.modifierFlags ?? []
-                if flags.contains(.shift) || flags.contains(.option) {
-                    textView.insertNewlineIgnoringFieldEditor(nil)
-                } else {
-                    parent.onSend()
-                }
-                return true
-            case #selector(NSResponder.cancelOperation(_:)):
-                parent.onEscape()
-                return true
-            default:
-                return false
-            }
-        }
+    func textDidChange(_ notification: Notification) {
+        guard let view else { return }
+        parent.text = view.string
     }
 
-    /// Takes dropped files as attachments instead of pasting their paths.
-    final class PadTextView: NSTextView {
-        weak var coordinator: Coordinator?
-
-        override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
-            fileURLs(in: sender).isEmpty ? super.draggingEntered(sender) : .copy
-        }
-
-        override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
-            fileURLs(in: sender).isEmpty ? super.draggingUpdated(sender) : .copy
-        }
-
-        override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-            let urls = fileURLs(in: sender)
-            guard !urls.isEmpty else { return super.performDragOperation(sender) }
-            coordinator?.parent.onDropFiles(urls)
+    func textView(_ textView: NSTextView, doCommandBy selector: Selector) -> Bool {
+        switch selector {
+        case #selector(NSResponder.insertNewline(_:)):
+            let flags = NSApp.currentEvent?.modifierFlags ?? []
+            if flags.contains(.shift) || flags.contains(.option) {
+                textView.insertNewlineIgnoringFieldEditor(nil)
+            } else {
+                parent.onSend()
+            }
             return true
+        case #selector(NSResponder.cancelOperation(_:)):
+            parent.onEscape()
+            return true
+        default:
+            return false
         }
+    }
+}
 
-        private func fileURLs(in info: NSDraggingInfo) -> [URL] {
-            let options: [NSPasteboard.ReadingOptionKey: Any] = [.urlReadingFileURLsOnly: true]
-            return info.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: options) as? [URL] ?? []
-        }
+/// Takes dropped files as attachments instead of pasting their paths.
+final class PadTextView: NSTextView {
+    weak var coordinator: PadInputCoordinator?
+
+    override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+        fileURLs(in: sender).isEmpty ? super.draggingEntered(sender) : .copy
+    }
+
+    override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
+        fileURLs(in: sender).isEmpty ? super.draggingUpdated(sender) : .copy
+    }
+
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        let urls = fileURLs(in: sender)
+        guard !urls.isEmpty else { return super.performDragOperation(sender) }
+        coordinator?.parent.onDropFiles(urls)
+        return true
+    }
+
+    private func fileURLs(in info: NSDraggingInfo) -> [URL] {
+        let options: [NSPasteboard.ReadingOptionKey: Any] = [.urlReadingFileURLsOnly: true]
+        return info.draggingPasteboard.readObjects(forClasses: [NSURL.self], options: options) as? [URL] ?? []
     }
 }

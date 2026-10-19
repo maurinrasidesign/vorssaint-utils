@@ -170,7 +170,7 @@ final class ClaudeHookBridge: ObservableObject {
         guard let settings = try? readSettings(),
               let hooks = settings["hooks"] as? [String: Any],
               let groups = hooks["PermissionRequest"] as? [[String: Any]] else { return false }
-        return groups.contains(isOurs) && FileManager.default.isExecutableFile(atPath: scriptURL.path)
+        return groups.contains(where: isOurs) && FileManager.default.isExecutableFile(atPath: scriptURL.path)
     }
 
     private static func readSettings() throws -> [String: Any] {
@@ -195,7 +195,7 @@ final class ClaudeHookBridge: ObservableObject {
             }
         }
         let data = try JSONSerialization.data(withJSONObject: settings, options: [.prettyPrinted, .sortedKeys])
-        try data.write(to: settingsURL, atomically: true)
+        try data.write(to: settingsURL, options: .atomic)
     }
 
     /// The running app's process name, which the script checks before waiting.
