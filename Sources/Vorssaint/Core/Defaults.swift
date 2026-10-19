@@ -857,6 +857,8 @@ enum DefaultsKey {
     // Watch: any part of any window read live in the island.
     static let notchWatchEnabled = "notchWatchEnabled"
     static let notchWatchSound = "notchWatchSound"
+    // Pad: the Claude Code prompt in the island.
+    static let notchPadEnabled = "notchPadEnabled"
     static let notchWatchCondition = "notchWatchCondition"
     static let notchCalendarEnabled = "notchCalendarEnabled"
     static let notchCalendarCountdown = "notchCalendarCountdown"
@@ -1481,6 +1483,7 @@ enum Defaults {
         DefaultsKey.notchDownloadsEnabled: true,
         DefaultsKey.notchWatchEnabled: true,
         DefaultsKey.notchWatchSound: true,
+        DefaultsKey.notchPadEnabled: true,
         DefaultsKey.notchWatchCondition: NotchWatchCondition.changes.rawValue,
         DefaultsKey.notchEnabled: false,
         DefaultsKey.notchDisplay: NotchDisplay.automatic.rawValue,

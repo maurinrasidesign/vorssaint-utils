@@ -374,6 +374,14 @@ final class FeatureRuntime: ObservableObject {
             if AppFeature.notch.isAvailable { NotchService.shared.syncWithPreferences() }
             else { NotchWatchService.shared.stop() }
         },
+        .notchPad: {
+            if AppFeature.notch.isAvailable && AppFeature.notchPad.isAvailable {
+                NotchService.shared.syncWithPreferences()
+                PadIslandCoordinator.shared.start()
+            } else {
+                PadIslandCoordinator.shared.stop()
+            }
+        },
         // Leaving folds the wings it rests in, and coming back greets.
         .notchMascot: {
             if AppFeature.notch.isAvailable { NotchService.shared.syncWithPreferences() }

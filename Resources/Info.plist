@@ -61,7 +61,9 @@
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Juno Island uses Bluetooth only to read the battery level of connected peripherals. Nothing leaves your Mac.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Juno Island records your microphone only when you turn it on for a screen recording. The audio stays on your Mac unless you choose to create a temporary link.</string>
+	<string>Juno Island uses your microphone only when you turn it on for a screen recording or press the Pad’s dictation button. The audio stays on your Mac unless you choose to create a temporary link.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>The Pad turns your dictation into text for Claude Code. Speech is recognized on your Mac when your language supports it, otherwise by Apple, like the system’s own dictation.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Show your upcoming appointments in the notch. Calendar events stay on this Mac.</string>
 	<key>NSCameraUsageDescription</key>
