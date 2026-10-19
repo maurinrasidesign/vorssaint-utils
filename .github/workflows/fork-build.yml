@@ -114,6 +114,139 @@ jobs:
           compression-level: 0
           retention-days: 30
 
+      # A version tag publishes a numbered release; every push to the main
+      # branch of the fork refreshes a rolling "latest" release, so the newest
+      # DMG always has the same public download link.
+      - name: Publish release
+        if: github.ref_type == 'tag' || github.ref_name == 'juno-island'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then TAG="$GITHUB_REF_NAME"; else TAG="latest"; fi
+          NOTES="$RUNNER_TEMP/notes.md"
+          {
+            echo "Juno Island ${TAG} (unofficial fork of Vorssaint, GPL-3.0-or-later), built from ${GITHUB_SHA:0:7}."
+            echo
+            echo "Unsigned build. After dragging the app to Applications, open it once with"
+            echo "right-click > Open (or run: xattr -dr com.apple.quarantine \"/Applications/Juno Island.app\")."
+            echo "Requires an Apple Silicon Mac with macOS 14 or newer."
+          } > "$NOTES"
+          if [[ "$TAG" == "latest" ]]; then
+            gh release delete "$TAG" --yes --cleanup-tag 2>/dev/null || true
+            gh release create "$TAG" dist/*.dmg dist/SHA256SUMS --target "$GITHUB_SHA" \
+              --title "Juno Island (latest build)" --notes-file "$NOTES" --latest
+          elif gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/*.dmg dist/SHA256SUMS --clobber
+          else
+            gh release create "$TAG" dist/*.dmg dist/SHA256SUMS \
+              --title "Juno Island $TAG" --notes-file "$NOTES"
+          fi
+
+  tests:
+        description: Also run the unit tests
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fork-build-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
+
+jobs:
+  build:
+    name: Build, selftest & package DMG
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Toolchain
+        run: |
+          sw_vers
+          swiftc --version
+          xcrun --sdk macosx --show-sdk-version
+
+      - name: Build
+        run: |
+          set -o pipefail
+          echo "::add-matcher::.github/swiftc-matcher.json"
+          ./build.sh 2>&1 | tee build-output.log
+
+      # The full log lives behind a storage URL this project's tooling cannot
+      # reach, so the compiler's complaints are also pushed to a tiny
+      # build-logs branch, readable with plain git.
+      - name: Publish compiler errors to the build-logs branch
+        if: failure()
+        run: |
+          set -euo pipefail
+          { grep -nE "error:|warning: " build-output.log | grep -v "warning: " || true; } | head -300 > errors.txt
+          { grep -nE "warning: " build-output.log || true; } | head -200 > warnings.txt
+          { grep -B2 -A8 -E "error:" build-output.log || true; } | head -2500 > errors-context.txt
+          tail -40 build-output.log > tail.txt
+          mkdir -p /tmp/logs && cp errors.txt warnings.txt errors-context.txt tail.txt /tmp/logs/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan build-logs
+          git rm -rfq . || true
+          mkdir -p "${GITHUB_SHA}"
+          cp /tmp/logs/*.txt "${GITHUB_SHA}/"
+          git add "${GITHUB_SHA}"
+          git commit -qm "compiler output for ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" build-logs
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      # A selftest finding is recorded but does not hold back the DMG.
+      - name: Selftest
+        id: selftest
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          ./build/JunoIsland --selftest 2>&1 | tee selftest.log
+
+      - name: Publish selftest output to the build-logs branch
+        if: steps.selftest.outcome == 'failure'
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/logs && cp selftest.log /tmp/logs/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin build-logs:build-logs || git checkout --orphan build-logs
+          git checkout build-logs 2>/dev/null || true
+          mkdir -p "${GITHUB_SHA}"
+          cp /tmp/logs/*.log "${GITHUB_SHA}/"
+          git add "${GITHUB_SHA}"
+          git commit -qm "selftest output for ${GITHUB_SHA}" || true
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" build-logs
+          git checkout -q "${GITHUB_SHA}" 2>/dev/null || true
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Package DMG
+        run: ./Tools/make-dmg.sh
+
+      - name: Checksums
+        run: |
+          cd dist
+          shasum -a 256 *.dmg | tee SHA256SUMS
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JunoIsland-dmg-${{ github.sha }}
+          path: |
+            dist/*.dmg
+            dist/SHA256SUMS
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
       - name: Publish release (tags only)
         if: github.ref_type == 'tag'
         env:
