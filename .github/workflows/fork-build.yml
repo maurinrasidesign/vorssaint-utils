@@ -20,7 +20,7 @@ concurrency:
 jobs:
   build:
     name: Build, selftest & package DMG
-    runs-on: macos-26
+    runs-on: macos-15
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
@@ -82,7 +82,7 @@ jobs:
 
   tests:
     name: Unit tests (informational)
-    runs-on: macos-26
+    runs-on: macos-15
     timeout-minutes: 45
     continue-on-error: true
     steps:
