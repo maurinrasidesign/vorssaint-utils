@@ -9,6 +9,11 @@ on:
     branches: ["**"]
     tags: ["v*"]
   workflow_dispatch:
+    inputs:
+      tests:
+        description: Also run the unit tests
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -109,6 +114,8 @@ jobs:
 
   tests:
     name: Unit tests (informational)
+    # Only on request: a second Mac runner per push just waits in the queue.
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.tests == 'true'
     runs-on: macos-15
     timeout-minutes: 45
     continue-on-error: true
