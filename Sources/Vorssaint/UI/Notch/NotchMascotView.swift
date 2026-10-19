@@ -51,6 +51,22 @@ final class NotchMascotRig: NSObject {
     private let fillMask = CAShapeLayer()
     private let visor = CAShapeLayer()
     private let shine = CAShapeLayer()
+    /// The person's own picture, in the image style.
+    private let picture = CALayer()
+    private var pictureVersion = -1
+    /// Juno's body, one layer per ink of the pixel grid; the eyes stay the
+    /// island's own, drawn over it.
+    private let pixels: [NotchMascotSprite.Ink: CAShapeLayer] =
+        Dictionary(uniqueKeysWithValues: NotchMascotSprite.Ink.allCases.map { ($0, CAShapeLayer()) })
+    /// The poses Juno plays for its mood, stepped by a timer while it shows.
+    private var spriteProgram: [NotchMascotSprite.Step] = []
+    private var spriteStep = 0
+    private var spriteTimer: Timer?
+    private var spritePaths: [[String]: [NotchMascotSprite.Ink: CGPath]] = [:]
+    /// Whether it draws Juno's body just now.
+    private var wearsSprite = false
+    /// Whether its view is on screen; poses and breathing wait otherwise.
+    private var shown = true
     private let face = CALayer()
     private let leftEye = CAShapeLayer()
     private let rightEye = CAShapeLayer()
@@ -72,18 +88,31 @@ final class NotchMascotRig: NSObject {
         root.addSublayer(hopper)
         hopper.addSublayer(squasher)
         squasher.addSublayer(tilter)
-        for layer in [ears, antenna, bulb, fill, visor, shine] { tilter.addSublayer(layer) }
+        for layer in [ears, antenna, bulb, fill, visor, shine, picture] { tilter.addSublayer(layer) }
+        for ink in NotchMascotSprite.Ink.allCases { tilter.addSublayer(pixels[ink]!) }
         tilter.addSublayer(attention)
         attention.addSublayer(face)
         face.addSublayer(leftEye)
         face.addSublayer(rightEye)
         fill.mask = fillMask
         for layer in [root, hopper, squasher, tilter, attention, face, ears, antenna, bulb, fill, fillMask, visor, shine,
-                      leftEye, rightEye] {
+                      picture, leftEye, rightEye] + pixels.values.map { $0 as CALayer } {
             layer.actions = Self.noActions
         }
+        for layer in pixels.values {
+            layer.isHidden = true
+            layer.fillRule = .nonZero
+        }
+        picture.contentsGravity = .resizeAspect
+        picture.magnificationFilter = .nearest
+        picture.minificationFilter = .trilinear
+        picture.isHidden = true
         shine.fillColor = NotchMascotColor.shine.cgColor
         visor.fillColor = NotchMascotColor.visor.cgColor
+    }
+
+    deinit {
+        spriteTimer?.invalidate()
     }
 
     private static let noActions: [String: CAAction] = [
@@ -98,7 +127,8 @@ final class NotchMascotRig: NSObject {
     /// Draws the companion at `size` points with `look`. Nothing moves, and a
     /// new look at the same size cross-fades in, as a choice in Settings does.
     func configure(look: NotchMascotLook, size: CGFloat, contentsScale scale: CGFloat) {
-        guard !configured || look != self.look || size != self.size || scale != root.contentsScale else { return }
+        let pictureChanged = look.style == .image && pictureVersion != NotchMascotImageStore.shared.version
+        guard !configured || look != self.look || size != self.size || scale != root.contentsScale || pictureChanged else { return }
         let restyled = configured && look != self.look && size == self.size && !reduceMotion
         configured = true
         self.look = look
@@ -115,11 +145,31 @@ final class NotchMascotRig: NSObject {
         }
         let box = CGRect(x: 0, y: 0, width: size, height: size)
         root.bounds = box
-        for layer in [hopper, squasher, tilter, attention, face, ears, antenna, bulb, fill, fillMask, visor, shine] {
+        for layer in [hopper, squasher, tilter, attention, face, ears, antenna, bulb, fill, fillMask, visor, shine, picture]
+            + pixels.values.map { $0 as CALayer } {
             layer.frame = box
             layer.contentsScale = scale
         }
         root.contentsScale = scale
+        // The image style draws the picture alone, with no eyes of the
+        // island's over a face it does not know; without a picture it wears
+        // Juno, so the companion never vanishes.
+        let store = NotchMascotImageStore.shared
+        let pictured = look.style == .image && store.image != nil
+        let sprite = look.style == .pixel || (look.style == .image && !pictured)
+        pictureVersion = store.version
+        picture.contents = pictured ? store.image : nil
+        picture.isHidden = !pictured
+        // Core Animation draws an image upside down in a flipped tree such as
+        // this one; it says so, and the picture is turned back.
+        picture.transform = pictured && picture.contentsAreFlipped() ? CATransform3DMakeScale(1, -1, 1) : CATransform3DIdentity
+        fill.isHidden = pictured || sprite
+        wearsSprite = sprite
+        spritePaths.removeAll()
+        for (ink, layer) in pixels {
+            layer.isHidden = !sprite
+            layer.fillColor = ink.color(in: look.palette).cgColor
+        }
         let robot = look.style == .robot
         let palette = look.palette
         fill.colors = [palette.light.cgColor, palette.shade.cgColor]
@@ -154,7 +204,9 @@ final class NotchMascotRig: NSObject {
         }
         for layer in [ears, antenna, bulb, visor] { layer.isHidden = !robot }
         shine.path = NotchMascotGeometry.shine(look.face, size: size)
-        shine.isHidden = robot
+        shine.isHidden = robot || pictured || sprite
+        leftEye.isHidden = pictured
+        rightEye.isHidden = pictured
         let face = look.face
         let side = size * 0.4
         leftEye.frame = CGRect(x: face.leftEye.x * size - side / 2, y: face.leftEye.y * size - side / 2, width: side, height: side)
@@ -162,6 +214,59 @@ final class NotchMascotRig: NSObject {
         leftEye.contentsScale = scale
         rightEye.contentsScale = scale
         apply(mood.expression, animated: false)
+        syncSprite()
+        breathe()
+    }
+
+    /// It is never quite still: a slow, slight swell of the body, as a breath,
+    /// on top of whatever else it does. Not with Reduce Motion, nor off screen.
+    private func breathe() {
+        tilter.removeAnimation(forKey: "breath")
+        guard !reduceMotion, shown, size > 0 else { return }
+        let breath = CABasicAnimation(keyPath: "transform.scale")
+        breath.fromValue = 0
+        breath.toValue = 0.035
+        breath.isAdditive = true
+        breath.duration = 2.4
+        breath.autoreverses = true
+        breath.repeatCount = .infinity
+        breath.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        tilter.add(breath, forKey: "breath")
+    }
+
+    // MARK: Juno's poses
+
+    /// Picks the poses for the face it keeps and starts them over.
+    private func syncSprite() {
+        spriteTimer?.invalidate()
+        spriteTimer = nil
+        guard wearsSprite, size > 0 else { return }
+        spriteProgram = NotchMascotSprite.program(for: mood)
+        spriteStep = 0
+        showSpriteStep()
+    }
+
+    private func showSpriteStep() {
+        guard !spriteProgram.isEmpty else { return }
+        let step = spriteProgram[spriteStep % spriteProgram.count]
+        let paths: [NotchMascotSprite.Ink: CGPath]
+        if let cached = spritePaths[step.frame.rows] {
+            paths = cached
+        } else {
+            paths = NotchMascotSprite.paths(step.frame, size: size, scale: root.contentsScale)
+            spritePaths[step.frame.rows] = paths
+        }
+        for (ink, layer) in pixels { layer.path = paths[ink] }
+        // One pose holds still; with Reduce Motion, or out of sight, so does
+        // a sequence, on its first pose.
+        guard spriteProgram.count > 1, !reduceMotion, shown else { return }
+        let timer = Timer(timeInterval: step.hold, repeats: false) { [weak self] _ in
+            guard let self else { return }
+            self.spriteStep += 1
+            self.showSpriteStep()
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        spriteTimer = timer
     }
 
     // MARK: Faces
@@ -174,6 +279,7 @@ final class NotchMascotRig: NSObject {
         if mood != .sleepy { blinks = 0 }
         apply(mood.expression, animated: animated && !reduceMotion)
         lightBulb(mood != .sleepy, animated: animated && !reduceMotion)
+        syncSprite()
         guard animated, !reduceMotion, size > 0 else { syncBlinking(); return }
         switch mood {
         case .surprised: pop()
@@ -274,6 +380,8 @@ final class NotchMascotRig: NSObject {
         blinks = 0
         dozed = false
         apply(mood.expression, animated: false)
+        syncSprite()
+        breathe()
     }
 
     // MARK: Attention
@@ -733,6 +841,11 @@ final class NotchMascotRig: NSObject {
 
     /// Blinks wait while the layer is out of sight, and `visible` resumes them.
     func setIdles(_ idles: Bool, visible: Bool) {
+        if shown != visible {
+            shown = visible
+            syncSprite()
+            breathe()
+        }
         let wanted = idles && visible
         guard wanted != self.idles else { return }
         self.idles = wanted

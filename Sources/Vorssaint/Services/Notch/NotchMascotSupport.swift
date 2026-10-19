@@ -13,6 +13,13 @@ import Foundation
 
 enum NotchMascotStyle: String, CaseIterable, Identifiable {
     case minimal, robot
+    /// Juno: the fork's own pixel owl, with the island's eyes on it, that
+    /// types while Claude works. See `NotchMascotSprite`.
+    case pixel
+    /// A picture of the person's own choosing, drawn pixel-sharp; the body's
+    /// motions (hops, bobs, nods) apply to it as to the other styles. Without
+    /// a picture it wears Juno.
+    case image
 
     var id: String { rawValue }
 }
@@ -43,6 +50,8 @@ struct NotchMascotColor: Equatable {
 /// swatches in Settings read as one row.
 enum NotchMascotPalette: String, CaseIterable, Identifiable {
     case pearl, lemon, peach, rose, lilac, sky, mint
+    /// Juno's own: a warm clay.
+    case terracotta
 
     var id: String { rawValue }
 
@@ -56,6 +65,7 @@ enum NotchMascotPalette: String, CaseIterable, Identifiable {
         case .lilac: return NotchMascotColor(red: 0.88, green: 0.83, blue: 1.00)
         case .sky: return NotchMascotColor(red: 0.77, green: 0.90, blue: 1.00)
         case .mint: return NotchMascotColor(red: 0.72, green: 0.97, blue: 0.86)
+        case .terracotta: return NotchMascotColor(red: 0.93, green: 0.58, blue: 0.45)
         }
     }
 
@@ -69,6 +79,7 @@ enum NotchMascotPalette: String, CaseIterable, Identifiable {
         case .lilac: return NotchMascotColor(red: 0.69, green: 0.59, blue: 0.96)
         case .sky: return NotchMascotColor(red: 0.43, green: 0.67, blue: 0.97)
         case .mint: return NotchMascotColor(red: 0.40, green: 0.83, blue: 0.66)
+        case .terracotta: return NotchMascotColor(red: 0.78, green: 0.39, blue: 0.25)
         }
     }
 }
@@ -316,6 +327,14 @@ struct NotchMascotFaceLayout: Equatable {
 
 extension NotchMascotLook {
     var face: NotchMascotFaceLayout {
+        if style == .pixel || style == .image {
+            // Juno's eyes sit on the cream of its face, between the brow and
+            // the beak; rounder than the others, as an owl's are.
+            return NotchMascotFaceLayout(leftEye: CGPoint(x: 0.345, y: 0.47), rightEye: CGPoint(x: 0.655, y: 0.47),
+                                         eyeSize: CGSize(width: 0.11, height: 0.19),
+                                         shineCenter: CGPoint(x: 0.31, y: 0.29), shineRadii: CGSize(width: 0.085, height: 0.055),
+                                         shineAngle: -0.5)
+        }
         if style == .robot {
             return NotchMascotFaceLayout(leftEye: CGPoint(x: 0.36, y: 0.63), rightEye: CGPoint(x: 0.64, y: 0.63),
                                          eyeSize: CGSize(width: 0.085, height: 0.16),
@@ -400,6 +419,8 @@ enum NotchMascotGeometry {
     /// wherever it is meant to be centred.
     static func figureOffset(_ look: NotchMascotLook) -> CGFloat {
         let bounds: CGRect
+        // Juno and a picture fill their square from top to bottom.
+        if look.style == .pixel || look.style == .image { return 0 }
         if look.style == .robot {
             let parts = robot(size: 1)
             bounds = [parts.ears, parts.antenna, parts.bulb]

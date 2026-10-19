@@ -448,8 +448,24 @@ final class NotchService: ObservableObject {
     /// unless it hides in the island.
     var mascotAtRest: Bool { mascotOn && idleContent == .none && !mascotInBar && !mascotTucked }
 
-    /// The face it keeps at rest: wide awake while Keep Awake holds the Mac up.
-    var mascotRestingMood: NotchMascotMood { KeepAwakeManager.shared.isActive ? .alert : .idle }
+    /// The face it keeps at rest: wide awake while Keep Awake holds the Mac
+    /// up, and following the Pad's conversation: listening, thinking while
+    /// Claude works, alert while a question waits for an answer.
+    var mascotRestingMood: NotchMascotMood {
+        if modules.contains(.pad) {
+            if PadDictation.shared.isListening { return .surprised }
+            let pad = ClaudePadService.shared
+            if pad.pending != nil { return .alert }
+            switch pad.status {
+            case .working: return .thinking
+            case .starting: return .searching
+            case .unavailable: return .confused
+            case .waiting: return .alert
+            case .idle: break
+            }
+        }
+        return KeepAwakeManager.shared.isActive ? .alert : .idle
+    }
 
     /// Whether the closed island on `geometry` draws the companion: resting,
     /// or strolling through, where its wings fit beside the camera. A capsule
@@ -3794,6 +3810,18 @@ final class NotchService: ObservableObject {
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] _ in
                     self?.syncMenuSpaceMonitoring()
+                    self?.objectWillChange.send()
+                    self?.refreshPresentation()
+                }.store(in: &subscriptions)
+        }
+        if modules.contains(.pad) {
+            // The companion's resting face follows the Pad, and so does the
+            // island's working surface while a request waits.
+            let pad = ClaudePadService.shared
+            Publishers.CombineLatest3(pad.$status.removeDuplicates(), pad.$pending.removeDuplicates(),
+                                      PadDictation.shared.$isListening.removeDuplicates())
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] _ in
                     self?.objectWillChange.send()
                     self?.refreshPresentation()
                 }.store(in: &subscriptions)

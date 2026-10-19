@@ -29,6 +29,24 @@ enum NotchMascotTests {
         dropletContracts(suite)
         calendarContracts(suite)
         centeringContracts(suite)
+        spriteContracts(suite)
+    }
+
+    /// Juno's poses are whole grids, every pose paints the same inks over
+    /// the same square, and a typing spell comes back round to rest.
+    private static func spriteContracts(_ suite: TestSuite) {
+        suite.expect(NotchMascotSprite.framesAreWellFormed, "every pose of Juno is a full grid of known inks")
+        let paths = NotchMascotSprite.paths(NotchMascotSprite.rest, size: 20, scale: 2)
+        suite.expect(paths[.outline] != nil && paths[.body] != nil && paths[.cream] != nil && paths[.beak] != nil,
+                     "the resting pose paints an outline, a body, a face and a beak")
+        let box = paths.values.reduce(CGRect.null) { $0.union($1.boundingBoxOfPath) }
+        suite.expect(abs(box.minX) < 0.01 && abs(box.minY) < 0.01 && abs(box.maxX - 20) < 0.01 && abs(box.maxY - 20) < 0.01,
+                     "Juno fills its square from top to bottom, which the centring counts on")
+        for mood in NotchMascotMood.allCases {
+            suite.expect(!NotchMascotSprite.program(for: mood).isEmpty, "a \(mood.rawValue) Juno has a pose")
+        }
+        suite.expect(NotchMascotSprite.program(for: .thinking).count > 1, "a thinking Juno types")
+        suite.expect(NotchMascotSprite.program(for: .idle).count == 1, "an idle Juno holds still, and its eyes do the rest")
     }
 
     /// Placed by its box, a minimal body sat below the middle it was given,
@@ -42,7 +60,9 @@ enum NotchMascotTests {
                     let middle: CGFloat = 15
                     let boxTop = middle - NotchMascotGeometry.figureOffset(look) * size - size / 2
                     let figure: CGRect
-                    if style == .robot {
+                    if style == .pixel || style == .image {
+                        figure = CGRect(x: 0, y: 0, width: size, height: size)
+                    } else if style == .robot {
                         let parts = NotchMascotGeometry.robot(size: size)
                         figure = [parts.ears, parts.antenna, parts.bulb]
                             .reduce(parts.head.boundingBoxOfPath) { $0.union($1.boundingBoxOfPath) }

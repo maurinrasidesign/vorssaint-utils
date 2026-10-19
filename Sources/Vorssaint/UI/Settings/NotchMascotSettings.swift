@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Vorssaint
 
+import AppKit
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// The companion's own page. It lives at the top in a slice of the island,
 /// bigger than life, and acts out what it does on request; below are how it
@@ -12,6 +14,9 @@ struct NotchMascotSettings: View {
     @ObservedObject private var l10n = L10n.shared
     /// Redraws when the island or the Command Bar is installed or removed.
     @ObservedObject private var features = FeatureRuntime.shared
+    /// Redraws the previews when the companion's own picture changes.
+    @ObservedObject private var pictures = NotchMascotImageStore.shared
+    @State private var pictureFailure: String?
     @AppStorage(DefaultsKey.notchEnabled) private var islandEnabled = false
     @AppStorage(DefaultsKey.notchSilhouette) private var silhouette = NotchSilhouette.capsule.rawValue
     @AppStorage(DefaultsKey.notchMascotEnabled) private var enabled = false
@@ -128,6 +133,10 @@ struct NotchMascotSettings: View {
                 }
             }
             .padding(.leading, settingsRowTextInset)
+            if look.style == .image {
+                pictureRow
+                    .transition(.opacity)
+            }
             if look.style == .minimal {
                 SettingsRow(symbol: "circle.square", title: text.shape) {
                     Text(text.shape(look.shape)).foregroundStyle(.secondary)
@@ -142,6 +151,43 @@ struct NotchMascotSettings: View {
             swatches
         }
         .animation(animation, value: look.style)
+    }
+
+    /// The picture the image style wears: choose one, or let it go.
+    private var pictureRow: some View {
+        let pad = FeatureStrings.pad(l10n.language)
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 8) {
+                Button(pad.chooseImage, action: choosePicture)
+                if pictures.hasImage {
+                    Button(pad.removeImage) {
+                        pictures.remove()
+                        NotchService.shared.syncWithPreferences()
+                    }
+                }
+            }
+            Text(pad.imageHint).font(.caption).foregroundStyle(.secondary)
+            if let pictureFailure {
+                Text(pictureFailure).font(.caption).foregroundStyle(.red)
+            }
+        }
+        .padding(.leading, settingsRowTextInset)
+    }
+
+    private func choosePicture() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.allowedContentTypes = [UTType.image]
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            try pictures.store(from: url)
+            pictureFailure = nil
+            NotchService.shared.syncWithPreferences()
+        } catch {
+            pictureFailure = error.localizedDescription
+        }
     }
 
     private var shapes: some View {

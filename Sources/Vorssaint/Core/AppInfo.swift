@@ -13,7 +13,7 @@ enum AppInfo {
     static let upstreamName = "Juno Island"
     static let upstreamRepositoryURL = URL(string: "https://github.com/vorssaint/vorssaint-utils")!
     /// This fork's GitHub repository; releases (DMG) are downloaded from here by hand.
-    static let repositoryURL = URL(string: "https://github.com/maurinrasi/vorssaint-utils")!
+    static let repositoryURL = URL(string: "https://github.com/maurinrasidesign/vorssaint-utils")!
     static let websiteURL = repositoryURL
     static let coffeeURL = URL(string: "https://buymeacoffee.com/vorssaint")!
     static let discordURL = repositoryURL

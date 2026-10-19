@@ -66,6 +66,10 @@ struct PadStrings {
     let terminalNoticeFinished: String
     let openTerminal: String
     let close: String
+    let ownImage: String
+    let chooseImage: String
+    let removeImage: String
+    let imageHint: String
     let keywords: String
 
     static var current: PadStrings { FeatureStrings.pad(L10n.shared.language) }
@@ -149,6 +153,10 @@ extension FeatureStrings {
             terminalNoticeFinished: "Aufgabe fertig",
             openTerminal: "Zum Terminal",
             close: "Schliessen",
+            ownImage: "Eigenes Bild",
+            chooseImage: "Bild wählen…",
+            removeImage: "Bild entfernen",
+            imageHint: "Ein PNG mit transparentem Hintergrund, am besten quadratisch. Pixelbilder werden scharf gezeichnet. Ohne Bild zeigt die Insel Juno, die Eule.",
             keywords: "Claude, KI, Chat, Juno, Assistent, Prompt"
         )
         default: return PadStrings(
@@ -209,6 +217,10 @@ extension FeatureStrings {
             terminalNoticeFinished: "Task finished",
             openTerminal: "Open Terminal",
             close: "Close",
+            ownImage: "Own image",
+            chooseImage: "Choose Image…",
+            removeImage: "Remove Image",
+            imageHint: "A PNG with a transparent background, ideally square. Pixel art is drawn crisp. Without an image the island shows Juno, the owl.",
             keywords: "Claude, AI, chat, Juno, assistant, prompt"
         )
         }
