@@ -67,6 +67,7 @@ final class NotchMascotRig: NSObject {
     private var wearsSprite = false
     /// Whether its view is on screen; poses and breathing wait otherwise.
     private var shown = true
+    private var pixelLayers: [CALayer] { pixels.values.map { $0 as CALayer } }
     private let face = CALayer()
     private let leftEye = CAShapeLayer()
     private let rightEye = CAShapeLayer()
@@ -96,7 +97,7 @@ final class NotchMascotRig: NSObject {
         face.addSublayer(rightEye)
         fill.mask = fillMask
         for layer in [root, hopper, squasher, tilter, attention, face, ears, antenna, bulb, fill, fillMask, visor, shine,
-                      picture, leftEye, rightEye] + pixels.values.map { $0 as CALayer } {
+                      picture, leftEye, rightEye] + pixelLayers {
             layer.actions = Self.noActions
         }
         for layer in pixels.values {
@@ -146,7 +147,7 @@ final class NotchMascotRig: NSObject {
         let box = CGRect(x: 0, y: 0, width: size, height: size)
         root.bounds = box
         for layer in [hopper, squasher, tilter, attention, face, ears, antenna, bulb, fill, fillMask, visor, shine, picture]
-            + pixels.values.map { $0 as CALayer } {
+            + pixelLayers {
             layer.frame = box
             layer.contentsScale = scale
         }
