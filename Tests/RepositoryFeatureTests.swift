@@ -216,18 +216,18 @@ enum RepositoryFeatureTests {
         suite.expect(repository.emptyPaths.isEmpty,
                "no Swift source is empty: \(repository.emptyPaths)")
         let requiredSourcePaths = [
-            "Sources/Vorssaint/Services/CommandBar/CommandBarSupport.swift",
-            "Sources/Vorssaint/Services/Homebrew/HomebrewManager.swift",
-            "Sources/Vorssaint/Services/Metrics/DiskSampler.swift",
-            "Sources/Vorssaint/Services/QuickTools/RecentCaptureService.swift",
-            "Sources/Vorssaint/Services/QuickTools/RecentCaptureStore.swift",
-            "Sources/Vorssaint/Services/SelfUninstall.swift",
-            "Sources/Vorssaint/Services/Shelf/ShelfService.swift",
-            "Sources/Vorssaint/Services/URLCleanerService.swift",
-            "Sources/Vorssaint/Support/Uninstaller.swift",
-            "Sources/Vorssaint/UI/MenuPanel/PanelURLCleanerView.swift",
-            "Sources/Vorssaint/UI/Settings/URLCleanerSettings.swift",
-            "Sources/Vorssaint/UI/Theme.swift",
+            "Sources/Juno Island/Services/CommandBar/CommandBarSupport.swift",
+            "Sources/Juno Island/Services/Homebrew/HomebrewManager.swift",
+            "Sources/Juno Island/Services/Metrics/DiskSampler.swift",
+            "Sources/Juno Island/Services/QuickTools/RecentCaptureService.swift",
+            "Sources/Juno Island/Services/QuickTools/RecentCaptureStore.swift",
+            "Sources/Juno Island/Services/SelfUninstall.swift",
+            "Sources/Juno Island/Services/Shelf/ShelfService.swift",
+            "Sources/Juno Island/Services/URLCleanerService.swift",
+            "Sources/Juno Island/Support/Uninstaller.swift",
+            "Sources/Juno Island/UI/MenuPanel/PanelURLCleanerView.swift",
+            "Sources/Juno Island/UI/Settings/URLCleanerSettings.swift",
+            "Sources/Juno Island/UI/Theme.swift",
         ]
         let missingSourcePaths = requiredSourcePaths.filter {
             repository.swiftSources[$0] == nil
@@ -266,7 +266,7 @@ enum RepositoryFeatureTests {
         // travel as `prompt:` and the label has to be hidden for a field to
         // own its whole row.
         let urlCleanerSettingsSource = repository.source(
-            at: "Sources/Vorssaint/UI/Settings/URLCleanerSettings.swift")
+            at: "Sources/Juno Island/UI/Settings/URLCleanerSettings.swift")
         suite.expect(!urlCleanerSettingsSource.contains("TextField(l10n.s."),
                "no Clean URL field spends its row on a label instead of the field")
         suite.expect(urlCleanerSettingsSource.components(separatedBy: "TextField(").count
@@ -300,12 +300,12 @@ enum RepositoryFeatureTests {
                 lines[start...].prefix { $0 != "    }" }.joined(separator: "\n")
             } ?? ""
         }
-        let storedRules = memberText(repository.lines(at: "Sources/Vorssaint/Services/URLCleanerService.swift"),
+        let storedRules = memberText(repository.lines(at: "Sources/Juno Island/Services/URLCleanerService.swift"),
                                      "    private static var rules: URLCleaning.Rules {")
         let ruleKeys = storedRules.components(separatedBy: "DefaultsKey.").dropFirst()
             .map { rest in String(rest.prefix { $0.isLetter || $0.isNumber }) }
-        for (surface, path) in [("Settings", "Sources/Vorssaint/UI/Settings/URLCleanerSettings.swift"),
-                                ("menu panel", "Sources/Vorssaint/UI/MenuPanel/PanelURLCleanerView.swift")] {
+        for (surface, path) in [("Settings", "Sources/Juno Island/UI/Settings/URLCleanerSettings.swift"),
+                                ("menu panel", "Sources/Juno Island/UI/MenuPanel/PanelURLCleanerView.swift")] {
             let lines = repository.lines(at: path)
             let reads = memberText(lines, "    private var result:") + "\n" + memberText(lines, "    private var rules:")
             let unobserved = ruleKeys.filter { key in
@@ -738,7 +738,7 @@ enum RepositoryFeatureTests {
         // MARK: Homebrew command building and parsing
 
         let homebrewManagerSource = repository.source(
-            at: "Sources/Vorssaint/Services/Homebrew/HomebrewManager.swift")
+            at: "Sources/Juno Island/Services/Homebrew/HomebrewManager.swift")
         let homebrewRunStreaming = homebrewManagerSource.components(separatedBy: "func runStreaming(")
             .dropFirst().first?.components(separatedBy: "private func appendLog").first ?? ""
         suite.expect(homebrewRunStreaming.contains("brewSilenceTimeout")
@@ -1304,7 +1304,7 @@ enum RepositoryFeatureTests {
         // decoded inside the preview's body, so every frame of an opacity
         // drag re-read it from disk; it is loaded once per chosen file now,
         // which is what a task is for.
-        let uiPrefix = "Sources/Vorssaint/UI/"
+        let uiPrefix = "Sources/Juno Island/UI/"
         let allUIFiles = repository.swiftPaths.filter { $0.hasPrefix(uiPrefix) }
         var decodingInBody: [String] = []
         for path in allUIFiles {
@@ -1360,7 +1360,7 @@ enum RepositoryFeatureTests {
         // the shared dispatch pool. Once unrelated work had taken every worker
         // in that pool, not one operation started and the wait never returned,
         // taking the whole app with it (issue #971).
-        let appPrefix = "Sources/Vorssaint/"
+        let appPrefix = "Sources/Juno Island/"
         let appSources = repository.swiftPaths.filter {
             $0.hasPrefix(appPrefix) && !$0.contains(" 2")
         }
@@ -1505,8 +1505,8 @@ enum RepositoryFeatureTests {
         let localizationSourcePaths = repository.swiftPaths.filter { path in
             let folder = (path as NSString).deletingLastPathComponent
             let name = (path as NSString).lastPathComponent
-            return (folder == "Sources/Vorssaint/Core"
-                    || folder == "Sources/Vorssaint/Core/Localizations")
+            return (folder == "Sources/Juno Island/Core"
+                    || folder == "Sources/Juno Island/Core/Localizations")
                 && (name.hasSuffix("Strings.swift") || name.hasPrefix("Strings+")
                     || name == "Localization.swift")
         }
@@ -1537,8 +1537,8 @@ enum RepositoryFeatureTests {
             return lines[start..<end]
         }
         let frenchSources = repository.swiftPaths.filter { path in
-            path == "Sources/Vorssaint/Core/Localizations/Strings+French.swift"
-                || ((path as NSString).deletingLastPathComponent == "Sources/Vorssaint/Core"
+            path == "Sources/Juno Island/Core/Localizations/Strings+French.swift"
+                || ((path as NSString).deletingLastPathComponent == "Sources/Juno Island/Core"
                     && path.hasSuffix("Strings.swift"))
         }
         var breakingFrench: [String] = []
@@ -1557,7 +1557,7 @@ enum RepositoryFeatureTests {
         suite.expect(breakingFrench.isEmpty,
                "French keeps its punctuation on the line it belongs to (\(Set(breakingFrench).sorted().prefix(4).joined(separator: ", ")))")
 
-        let themeSource = repository.source(at: "Sources/Vorssaint/UI/Theme.swift")
+        let themeSource = repository.source(at: "Sources/Juno Island/UI/Theme.swift")
         let raisedReads = themeSource
             .components(separatedBy: "accessibilityDisplayShouldIncreaseContrast").count - 1
         suite.expect(raisedReads == 2,
@@ -1583,7 +1583,7 @@ enum RepositoryFeatureTests {
 
         // Purgeable space is queried only for writable volumes.
         let samplerCode = repository.lines(
-            at: "Sources/Vorssaint/Services/Metrics/DiskSampler.swift")
+            at: "Sources/Juno Island/Services/Metrics/DiskSampler.swift")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
             .joined(separator: "\n")
         suite.expect(!samplerCode.isEmpty, "the disk sampler reads back for its shape check")
@@ -1730,9 +1730,9 @@ enum RepositoryFeatureTests {
         let ownershipGuards = ["isShelfOwnedFile", "discardablePaths", "ownedPayloadURLs",
                                "isRegularFile", "tempDir", "legacyDir", "root", "uuidString",
                                "storeRoot", "contentsOfDirectory"]
-        for path in ["Sources/Vorssaint/Services/Shelf/ShelfService.swift",
-                     "Sources/Vorssaint/Services/QuickTools/RecentCaptureService.swift",
-                     "Sources/Vorssaint/Services/QuickTools/RecentCaptureStore.swift"] {
+        for path in ["Sources/Juno Island/Services/Shelf/ShelfService.swift",
+                     "Sources/Juno Island/Services/QuickTools/RecentCaptureService.swift",
+                     "Sources/Juno Island/Services/QuickTools/RecentCaptureStore.swift"] {
             let lines = repository.lines(at: path)
             suite.expect(!lines.isEmpty, "the store source reads back for its deletion check")
             for (index, line) in lines.enumerated() where line.contains("removeItem(at:") {
@@ -1841,7 +1841,7 @@ enum RepositoryFeatureTests {
 
         // MARK: Uninstallation paths stay aligned across SelfUninstall and Tools/uninstall.sh
         let selfUninstallSource = repository.source(
-            at: "Sources/Vorssaint/Services/SelfUninstall.swift")
+            at: "Sources/Juno Island/Services/SelfUninstall.swift")
         let uninstallScriptSource = (try? String(contentsOfFile: "Tools/uninstall.sh",
                                                 encoding: .utf8)) ?? ""
         suite.expect(!selfUninstallSource.isEmpty && !uninstallScriptSource.isEmpty,
@@ -1849,9 +1849,9 @@ enum RepositoryFeatureTests {
         suite.expect(selfUninstallSource.contains("CleaningModeManager.shared.deactivateForSystemTeardown()"),
                "permission reset removes the cleaning input tap synchronously")
         let queryHabitSupportSource = repository.source(
-            at: "Sources/Vorssaint/Services/CommandBar/CommandBarSupport.swift")
+            at: "Sources/Juno Island/Services/CommandBar/CommandBarSupport.swift")
         let queryHabitServiceSource = repository.source(
-            at: "Sources/Vorssaint/Services/CommandBar/CommandBarService.swift")
+            at: "Sources/Juno Island/Services/CommandBar/CommandBarService.swift")
         suite.expect(!queryHabitSupportSource.isEmpty
                 && !queryHabitServiceSource.isEmpty
                 && !queryHabitSupportSource.contains("SecItem")
@@ -1875,7 +1875,7 @@ enum RepositoryFeatureTests {
                 .filter { $0.hasPrefix("/etc/sudoers.d/") })
         }
         let appRuleFiles = sudoersRuleFiles(
-            repository.source(at: "Sources/Vorssaint/Services/ShellSupport.swift"))
+            repository.source(at: "Sources/Juno Island/Services/ShellSupport.swift"))
         let scriptRuleFiles = sudoersRuleFiles(uninstallScriptSource.components(separatedBy: "\n")
             .first { $0.hasPrefix("RULES=(") } ?? "")
         suite.expect(!appRuleFiles.isEmpty && scriptRuleFiles == appRuleFiles,
@@ -1886,7 +1886,7 @@ enum RepositoryFeatureTests {
         // reads the setting, so nothing repairs it afterwards — a reinstall
         // included.
         let uninstallerSource = repository.source(
-            at: "Sources/Vorssaint/Support/Uninstaller.swift")
+            at: "Sources/Juno Island/Support/Uninstaller.swift")
         suite.expect(!uninstallerSource.isEmpty,
                "uninstaller entry point reads back for the sleep restore check")
         suite.expect(!selfUninstallSource.contains("_ = Sudoers.pmsetDisableSleep")
@@ -1915,7 +1915,7 @@ enum RepositoryFeatureTests {
                 && !uninstallScriptSource.contains("killall"),
                "script uninstall reads Space rearranging back for itself and never changes it")
         let brightnessSource = repository.source(
-            at: "Sources/Vorssaint/Services/Display/BrightnessService.swift")
+            at: "Sources/Juno Island/Services/Display/BrightnessService.swift")
         let brightnessTapMethod = brightnessSource
             .components(separatedBy: "    func suspendInputTaps()").dropFirst().first?
             .components(separatedBy: "    private func installFunctionKeyTap").first ?? ""
@@ -1933,7 +1933,7 @@ enum RepositoryFeatureTests {
                 && !brightnessTapCode.contains("restoreAllGamma"),
                "the permission teardown stops every persistent keyboard tap")
         let quitProtectionSource = repository.source(
-            at: "Sources/Vorssaint/Services/QuitProtection/QuitProtectionService.swift")
+            at: "Sources/Juno Island/Services/QuitProtection/QuitProtectionService.swift")
         suite.expect(quitProtectionSource.contains("func suspend()"),
                "quit protection exposes the teardown the permission reset calls")
 

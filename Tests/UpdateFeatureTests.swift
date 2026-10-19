@@ -263,7 +263,7 @@ enum UpdateFeatureTests {
         // that delegate's deinit is what deletes the scratch file, so the
         // release path has to invalidate the session too.
         let showcaseSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/Update/UpdateShowcaseMedia.swift",
+            contentsOfFile: "Sources/Juno Island/Services/Update/UpdateShowcaseMedia.swift",
             encoding: .utf8)) ?? ""
         let showcaseDeinitBody = (showcaseSource.components(separatedBy: "\n    deinit {")
             .dropFirst().first ?? "").components(separatedBy: "\n    }").first ?? ""
@@ -951,13 +951,13 @@ enum UpdateFeatureTests {
         suite.expect(UpdateInstallerSupport.installFailureCode(fromMarker: "") == nil,
                "an empty marker is not a failure")
         suite.expect(UpdateInstallerSupport.runsFromImmutableLocation(
-                   appPath: "/private/var/folders/ab/xyz/T/AppTranslocation/1F2/d/Vorssaint.app",
+                   appPath: "/private/var/folders/ab/xyz/T/AppTranslocation/1F2/d/Juno Island.app",
                    volumeIsReadOnly: { _ in false }),
                "translocated apps are flagged as not updatable in place")
-        suite.expect(UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/Vorssaint/Vorssaint.app",
+        suite.expect(UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/Juno Island/Juno Island.app",
                                                                 volumeIsReadOnly: { _ in true }),
                "apps on a read-only volume (the DMG) are flagged as not updatable in place")
-        suite.expect(!UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/ExternalSSD/Vorssaint.app",
+        suite.expect(!UpdateInstallerSupport.runsFromImmutableLocation(appPath: "/Volumes/ExternalSSD/Juno Island.app",
                                                                  volumeIsReadOnly: { _ in false }),
                "apps on a writable external volume stay updatable in place")
         let installerScript = UpdateInstallerSupport.installerScript()
@@ -994,8 +994,8 @@ enum UpdateFeatureTests {
                 && !installerScript.contains("note() { /bin/echo \"$1\" > \"$RESULT.progress\""),
                "elevated marker writes drop to the original user's credentials")
         let elevated = UpdateInstallerSupport.elevatedInstallCommand(
-            appPath: "/Applications/Vorssaint.app",
-            dmgPath: "/tmp/Vorssaint-update.dmg",
+            appPath: "/Applications/Juno Island.app",
+            dmgPath: "/tmp/Juno Island-update.dmg",
             pid: 123,
             resultPath: "/tmp/result",
             uid: 501,
@@ -1004,7 +1004,7 @@ enum UpdateFeatureTests {
                "elevated installer leaves this app's session so it outlives the app it replaces")
         suite.expect(elevated.contains("nohup"),
                "elevated installer keeps the nohup fallback if setsid is unavailable")
-        suite.expect(elevated.contains("'/Applications/Vorssaint.app'"),
+        suite.expect(elevated.contains("'/Applications/Juno Island.app'"),
                "elevated installer passes the app path quoted for the shell")
         suite.expect(elevated.contains("'3.3.3'"),
                "elevated installer passes the expected version quoted for the shell")
@@ -1142,8 +1142,8 @@ enum UpdateFeatureTests {
                "the beta channel offers the hotfix while the stable channel ignores it")
 
         // Release candidate selection
-        let dummyDMG = URL(string: "https://github.com/vorssaint/vorssaint-utils/releases/download/v3.3.4/Vorssaint.dmg")!
-        let dummyBetaDMG = URL(string: "https://github.com/vorssaint/vorssaint-utils/releases/download/v3.3.4-beta.1/Vorssaint.dmg")!
+        let dummyDMG = URL(string: "https://github.com/vorssaint/vorssaint-utils/releases/download/v3.3.4/Juno Island.dmg")!
+        let dummyBetaDMG = URL(string: "https://github.com/vorssaint/vorssaint-utils/releases/download/v3.3.4-beta.1/Juno Island.dmg")!
 
         let candidateList = [
             UpdateServiceSupport.ReleaseCandidate(tagName: "v3.3.4-beta.1", isPrerelease: true, isDraft: false, dmgURL: dummyBetaDMG, dmgExpectedBytes: 1000, body: "Beta notes"),
@@ -1235,7 +1235,7 @@ enum UpdateFeatureTests {
         // what the service does with the third state is pinned by source. Both
         // needles are public symbols, not a line's spelling.
         let launchAtLoginSource = (try? String(
-            contentsOfFile: "Sources/Vorssaint/Services/LaunchAtLogin.swift",
+            contentsOfFile: "Sources/Juno Island/Services/LaunchAtLogin.swift",
             encoding: .utf8)) ?? ""
         suite.expect(launchAtLoginSource.contains(".requiresApproval"),
                "an approval-pending login item is read as its own state")
@@ -1484,7 +1484,7 @@ enum UpdateFeatureTests {
             ignoredTokens: ["vorssaint"],
             apps: [])
         suite.expect(ownPackageRows.isEmpty,
-               "the app update list never offers to replace Vorssaint through its own package")
+               "the app update list never offers to replace Juno Island through its own package")
 
         let storeApps = [
             AppUpdatesSupport.InstalledApp(name: "Blocker", bundleID: "net.example.blocker",

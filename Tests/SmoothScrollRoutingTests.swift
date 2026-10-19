@@ -232,7 +232,7 @@ enum SmoothScrollRoutingTests {
         suite.expect(distance == 40 && !landing.scheduled && landing.targetEvent == nil
                 && landing.targetLatch.target == nil,
                      "a complete glide delivers its full distance and releases the original receiver")
-        for path in ["Sources/Vorssaint/Services/SmoothScrollService.swift", "Sources/Vorssaint/Services/ScrollInverter.swift"] {
+        for path in ["Sources/Juno Island/Services/SmoothScrollService.swift", "Sources/Juno Island/Services/ScrollInverter.swift"] {
             let source = (try? String(contentsOfFile: path, encoding: .utf8)) ?? ""
             suite.expect(source.contains("tap: ScrollWheelSupport.tapLocation"),
                          "both wheel taps retain their ordering at the stage with window annotations")

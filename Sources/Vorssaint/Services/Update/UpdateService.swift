@@ -61,6 +61,7 @@ final class UpdateService: ObservableObject {
 
     /// Called at launch: checks shortly after start and then daily, if enabled.
     func startAutomaticChecks() {
+        if AppInfo.updatesDisabled { return }
         consumeInstallResult()
         if AppInfo.isBeta && UserDefaults.standard.object(forKey: DefaultsKey.includeBetaUpdates) == nil {
             UserDefaults.standard.set(true, forKey: DefaultsKey.includeBetaUpdates)
@@ -100,6 +101,13 @@ final class UpdateService: ObservableObject {
     // MARK: - Check
 
     func check(manual: Bool) {
+        if AppInfo.updatesDisabled {
+            // Unofficial fork: no update feed the installer could verify.
+            state = .upToDate
+            availableNotes = nil
+            lastChecked = Date()
+            return
+        }
         if AppInfo.isDeveloperBuild {
             // No real update target; reflect the simulation default so the
             // notification UI can be exercised locally.
@@ -277,7 +285,7 @@ final class UpdateService: ObservableObject {
                     }
                     // Move out of the session's scratch space before handing off.
                     let dmgURL = FileManager.default.temporaryDirectory
-                        .appendingPathComponent("Vorssaint-update.dmg")
+                        .appendingPathComponent("Juno Island-update.dmg")
                     try? FileManager.default.removeItem(at: dmgURL)
                     do {
                         try FileManager.default.moveItem(at: tempURL, to: dmgURL)
@@ -505,7 +513,7 @@ final class BoundedUpdateDownloadDelegate: NSObject, URLSessionDataDelegate {
         self.progress = progress
         self.completion = completion
         let temporaryFileURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("Vorssaint-update-\(UUID().uuidString).download")
+            .appendingPathComponent("Juno Island-update-\(UUID().uuidString).download")
         fileURL = temporaryFileURL
         guard FileManager.default.createFile(atPath: temporaryFileURL.path, contents: nil) else {
             throw CocoaError(.fileWriteUnknown)

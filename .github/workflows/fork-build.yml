@@ -1,0 +1,94 @@
+name: Build Juno Island
+
+# Unofficial fork: every push builds the app on a GitHub-hosted Mac and keeps
+# the unsigned DMG as a workflow artifact. A version tag (v*) additionally
+# publishes a GitHub Release with the DMG attached. No Apple signing is used:
+# open the app once with right-click > Open after installing.
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fork-build-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
+
+jobs:
+  build:
+    name: Build, selftest & package DMG
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Toolchain
+        run: |
+          sw_vers
+          swiftc --version
+          xcrun --sdk macosx --show-sdk-version
+
+      - name: Build
+        run: ./build.sh
+
+      - name: Selftest
+        run: ./build/JunoIsland --selftest
+
+      - name: Package DMG
+        run: ./Tools/make-dmg.sh
+
+      - name: Checksums
+        run: |
+          cd dist
+          shasum -a 256 *.dmg | tee SHA256SUMS
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JunoIsland-dmg-${{ github.sha }}
+          path: |
+            dist/*.dmg
+            dist/SHA256SUMS
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Publish release (tags only)
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          NOTES="$RUNNER_TEMP/notes.md"
+          {
+            echo "Juno Island ${GITHUB_REF_NAME} (unofficial fork of Vorssaint, GPL-3.0-or-later)."
+            echo
+            echo "Unsigned build. After dragging the app to Applications, open it once with"
+            echo "right-click > Open (or run: xattr -dr com.apple.quarantine \"/Applications/Juno Island.app\")."
+            echo "Requires an Apple Silicon Mac with macOS 14 or newer."
+          } > "$NOTES"
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/*.dmg dist/SHA256SUMS --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/*.dmg dist/SHA256SUMS \
+              --title "Juno Island $GITHUB_REF_NAME" --notes-file "$NOTES"
+          fi
+
+  tests:
+    name: Unit tests (informational)
+    runs-on: macos-26
+    timeout-minutes: 45
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Unit tests
+        run: ./build.sh --test

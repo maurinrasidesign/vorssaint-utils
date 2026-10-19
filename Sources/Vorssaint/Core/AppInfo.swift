@@ -5,13 +5,22 @@ import Foundation
 
 /// Static identity of the app, shared by UI, notifications and tooling.
 enum AppInfo {
-    static let name = "Vorssaint"
-    static let copyright = "© 2026 Vorssaint"
-    static let websiteURL = URL(string: "https://vorssaint.com")!
-    static let repositoryURL = URL(string: "https://github.com/vorssaint/vorssaint-utils")!
+    // Juno Island is an unofficial fork of Vorssaint (GPL-3.0-or-later). The
+    // name, icon and bundle identity are the fork's own, as TRADEMARKS.md asks.
+    static let name = "Juno Island"
+    static let copyright = "© 2026 Maurin Rasi · based on Juno Island"
+    /// The upstream project this fork is built on.
+    static let upstreamName = "Juno Island"
+    static let upstreamRepositoryURL = URL(string: "https://github.com/vorssaint/vorssaint-utils")!
+    /// This fork's GitHub repository; releases (DMG) are downloaded from here by hand.
+    static let repositoryURL = URL(string: "https://github.com/maurinrasi/vorssaint-utils")!
+    static let websiteURL = repositoryURL
     static let coffeeURL = URL(string: "https://buymeacoffee.com/vorssaint")!
-    static let discordURL = URL(string: "https://discord.gg/M6BwWH4BJp")!
-    static let socialURL = URL(string: "https://x.com/vorssaint")!
+    static let discordURL = repositoryURL
+    static let socialURL = repositoryURL
+    /// The fork ships unsigned builds from its own GitHub releases, which the
+    /// upstream self-updater cannot verify or install. Updates are manual.
+    static let updatesDisabled = true
 
     /// The bundle version. The fallback only applies to the bare binary
     /// (e.g. `--selftest`), never the shipped app, which reads its Info.plist.

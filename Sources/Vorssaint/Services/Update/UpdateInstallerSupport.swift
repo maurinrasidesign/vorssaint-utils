@@ -98,7 +98,7 @@ enum UpdateInstallerSupport {
             # app at all. The staging name is hidden: Spotlight recognizes the
             # copy as an app bundle whatever its suffix, and when the swap lands
             # while that copy is still being indexed, the installed app keeps
-            # showing up in search as "Vorssaint.app.update-new".
+            # showing up in search as "Juno Island.app.update-new".
             STAGE="$DIR/.$NAME.update-new"
             # A copy an earlier build left behind under the visible name is the
             # same leftover, still indexed; it goes with this one.

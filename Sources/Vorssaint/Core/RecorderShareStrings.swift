@@ -40,7 +40,7 @@ extension FeatureStrings {
 extension RecorderShareStrings {
     static let enUS = RecorderShareStrings(
         caption: "Choose 1 or 6 hours. The final video is compressed on this Mac to fit under 100 MB and deleted automatically.",
-        privacyData: "Vorssaint sends only the final video created from this recording, including the audio you kept, and the expiration you choose. It does not send your name, account or device identifier.",
+        privacyData: "Juno Island sends only the final video created from this recording, including the audio you kept, and the expiration you choose. It does not send your name, account or device identifier.",
         privacyStorage: "Network providers and the service temporarily process your public IP to prevent abuse. The video and link metadata are permanently deleted when you delete the link or its time ends. The service does not create backups.",
         privacyAccess: "Anyone with the link can view, download, save or redistribute the video. Active links are available to the service operator for abuse moderation. Share only with people you trust.",
         compressing: "Compressing for sharing…",
@@ -52,7 +52,7 @@ extension RecorderShareStrings {
 
     static let ptBR = RecorderShareStrings(
         caption: "Escolha 1 ou 6 horas. O vídeo final é comprimido neste Mac para ficar abaixo de 100 MB e apagado automaticamente.",
-        privacyData: "O Vorssaint envia somente o vídeo final criado desta gravação, incluindo o áudio que você manteve, e o prazo escolhido. Não envia seu nome, conta nem identificador do aparelho.",
+        privacyData: "O Juno Island envia somente o vídeo final criado desta gravação, incluindo o áudio que você manteve, e o prazo escolhido. Não envia seu nome, conta nem identificador do aparelho.",
         privacyStorage: "Os provedores de rede e o serviço processam temporariamente seu IP público para impedir abusos. O vídeo e os metadados do link são apagados definitivamente quando você apagar o link ou o prazo terminar. O serviço não cria backups.",
         privacyAccess: "Qualquer pessoa com o link pode ver, baixar, salvar ou redistribuir o vídeo. Os links ativos ficam disponíveis ao operador do serviço para moderação de abuso. Compartilhe somente com pessoas de confiança.",
         compressing: "Comprimindo para compartilhar…",
@@ -64,7 +64,7 @@ extension RecorderShareStrings {
 
     static let tr = RecorderShareStrings(
         caption: "1 veya 6 saat seçin. Son video bu Mac’te 100 MB altında kalacak şekilde sıkıştırılır ve otomatik olarak silinir.",
-        privacyData: "Vorssaint yalnızca bu kayıttan oluşturulan son videoyu, koruduğunuz sesle ve seçtiğiniz süreyle birlikte gönderir. Adınızı, hesabınızı veya aygıt kimliğinizi göndermez.",
+        privacyData: "Juno Island yalnızca bu kayıttan oluşturulan son videoyu, koruduğunuz sesle ve seçtiğiniz süreyle birlikte gönderir. Adınızı, hesabınızı veya aygıt kimliğinizi göndermez.",
         privacyStorage: "Ağ sağlayıcıları ve hizmet, kötüye kullanımı önlemek için genel IP adresinizi geçici olarak işler. Video ve bağlantı verileri, bağlantıyı sildiğinizde veya süresi dolduğunda kalıcı olarak silinir. Hizmet yedek oluşturmaz.",
         privacyAccess: "Bağlantıya sahip herkes videoyu izleyebilir, indirebilir, kaydedebilir veya yeniden dağıtabilir. Etkin bağlantılar kötüye kullanım denetimi için hizmet operatörüne açıktır. Yalnızca güvendiğiniz kişilerle paylaşın.",
         compressing: "Paylaşım için sıkıştırılıyor…",
@@ -76,7 +76,7 @@ extension RecorderShareStrings {
 
     static let ru = RecorderShareStrings(
         caption: "Выберите 1 или 6 часов. Готовое видео сжимается на этом Mac до размера менее 100 МБ и удаляется автоматически.",
-        privacyData: "Vorssaint отправляет только готовое видео из этой записи, включая оставленный вами звук, и выбранный срок. Имя, учётная запись и идентификатор устройства не отправляются.",
+        privacyData: "Juno Island отправляет только готовое видео из этой записи, включая оставленный вами звук, и выбранный срок. Имя, учётная запись и идентификатор устройства не отправляются.",
         privacyStorage: "Сетевые провайдеры и сервис временно обрабатывают ваш публичный IP-адрес для защиты от злоупотреблений. Видео и данные ссылки безвозвратно удаляются при удалении ссылки или истечении срока. Сервис не создаёт резервных копий.",
         privacyAccess: "Любой, у кого есть ссылка, может посмотреть, скачать, сохранить или распространить видео. Активные ссылки доступны оператору сервиса для модерации злоупотреблений. Делитесь только с теми, кому доверяете.",
         compressing: "Сжатие для публикации…",
@@ -88,7 +88,7 @@ extension RecorderShareStrings {
 
     static let es = RecorderShareStrings(
         caption: "Elige 1 o 6 horas. El vídeo final se comprime en este Mac para quedar por debajo de 100 MB y se elimina automáticamente.",
-        privacyData: "Vorssaint envía solo el vídeo final creado a partir de esta grabación, incluido el audio que conservaste, y el plazo elegido. No envía tu nombre, cuenta ni identificador del dispositivo.",
+        privacyData: "Juno Island envía solo el vídeo final creado a partir de esta grabación, incluido el audio que conservaste, y el plazo elegido. No envía tu nombre, cuenta ni identificador del dispositivo.",
         privacyStorage: "Los proveedores de red y el servicio procesan temporalmente tu IP pública para evitar abusos. El vídeo y los datos del enlace se eliminan para siempre cuando borras el enlace o vence. El servicio no crea copias de seguridad.",
         privacyAccess: "Cualquiera que tenga el enlace puede ver, descargar, guardar o redistribuir el vídeo. El operador del servicio puede acceder a los enlaces activos para moderar abusos. Compártelos solo con personas de confianza.",
         compressing: "Comprimiendo para compartir…",
@@ -100,7 +100,7 @@ extension RecorderShareStrings {
 
     static let sk = RecorderShareStrings(
         caption: "Vyberte 1 alebo 6 hodín. Finálne video sa na tomto Macu skomprimuje pod 100 MB a automaticky sa vymaže.",
-        privacyData: "Vorssaint odosiela iba finálne video vytvorené z tohto nahrávania, vrátane zvuku, ktorý ste ponechali, a vami zvolenej platnosti. Neodosiela vaše meno, účet ani identifikátor zariadenia.",
+        privacyData: "Juno Island odosiela iba finálne video vytvorené z tohto nahrávania, vrátane zvuku, ktorý ste ponechali, a vami zvolenej platnosti. Neodosiela vaše meno, účet ani identifikátor zariadenia.",
         privacyStorage: "Poskytovatelia siete a služba dočasne spracúvajú vašu verejnú IP adresu, aby zabránili zneužitiu. Video a metadáta odkazu sa natrvalo vymažú, keď odkaz vymažete alebo keď uplynie jeho platnosť. Služba nevytvára zálohy.",
         privacyAccess: "Ktokoľvek s odkazom môže video zobraziť, stiahnuť, uložiť alebo ďalej šíriť. Aktívne odkazy sú dostupné prevádzkovateľovi služby na moderovanie zneužitia. Zdieľajte iba s ľuďmi, ktorým dôverujete.",
         compressing: "Komprimuje sa na zdieľanie…",
@@ -112,7 +112,7 @@ extension RecorderShareStrings {
 
     static let de = RecorderShareStrings(
         caption: "Wähle 1 oder 6 Stunden. Das fertige Video wird auf diesem Mac auf unter 100 MB komprimiert und automatisch gelöscht.",
-        privacyData: "Vorssaint sendet nur das fertige Video aus dieser Aufnahme, einschließlich des beibehaltenen Tons, und die gewählte Dauer. Name, Konto und Gerätekennung werden nicht gesendet.",
+        privacyData: "Juno Island sendet nur das fertige Video aus dieser Aufnahme, einschließlich des beibehaltenen Tons, und die gewählte Dauer. Name, Konto und Gerätekennung werden nicht gesendet.",
         privacyStorage: "Netzwerkanbieter und der Dienst verarbeiten deine öffentliche IP vorübergehend zum Schutz vor Missbrauch. Video und Linkdaten werden beim Löschen oder nach Ablauf dauerhaft entfernt. Der Dienst erstellt keine Sicherungskopien.",
         privacyAccess: "Jeder mit dem Link kann das Video ansehen, laden, speichern oder weitergeben. Aktive Links sind für den Dienstbetreiber zur Missbrauchsprüfung verfügbar. Teile sie nur mit vertrauenswürdigen Personen.",
         compressing: "Wird zum Teilen komprimiert…",
@@ -124,7 +124,7 @@ extension RecorderShareStrings {
 
     static let fr = RecorderShareStrings(
         caption: "Choisissez 1 ou 6 heures. La vidéo finale est compressée sur ce Mac à moins de 100 Mo, puis supprimée automatiquement.",
-        privacyData: "Vorssaint envoie uniquement la vidéo finale créée à partir de cet enregistrement, avec l’audio conservé, et la durée choisie. Votre nom, compte et identifiant d’appareil ne sont pas envoyés.",
+        privacyData: "Juno Island envoie uniquement la vidéo finale créée à partir de cet enregistrement, avec l’audio conservé, et la durée choisie. Votre nom, compte et identifiant d’appareil ne sont pas envoyés.",
         privacyStorage: "Les fournisseurs réseau et le service traitent temporairement votre adresse IP publique pour prévenir les abus. La vidéo et les données du lien sont définitivement supprimées quand vous effacez le lien ou à son expiration. Le service ne crée aucune sauvegarde.",
         privacyAccess: "Toute personne disposant du lien peut voir, télécharger, enregistrer ou redistribuer la vidéo. Les liens actifs sont accessibles à l’opérateur du service pour modérer les abus. Partagez-les uniquement avec des personnes de confiance.",
         compressing: "Compression pour le partage…",
@@ -136,7 +136,7 @@ extension RecorderShareStrings {
 
     static let it = RecorderShareStrings(
         caption: "Scegli 1 o 6 ore. Il video finale viene compresso su questo Mac sotto i 100 MB ed eliminato automaticamente.",
-        privacyData: "Vorssaint invia solo il video finale creato da questa registrazione, incluso l’audio mantenuto, e la durata scelta. Non invia nome, account o identificativo del dispositivo.",
+        privacyData: "Juno Island invia solo il video finale creato da questa registrazione, incluso l’audio mantenuto, e la durata scelta. Non invia nome, account o identificativo del dispositivo.",
         privacyStorage: "I fornitori di rete e il servizio elaborano temporaneamente il tuo IP pubblico per prevenire abusi. Il video e i dati del link vengono eliminati definitivamente quando cancelli il link o alla scadenza. Il servizio non crea backup.",
         privacyAccess: "Chiunque abbia il link può vedere, scaricare, salvare o ridistribuire il video. I link attivi sono disponibili al gestore del servizio per moderare gli abusi. Condividili solo con persone fidate.",
         compressing: "Compressione per la condivisione…",
@@ -207,7 +207,7 @@ extension RecorderShareStrings {
     )
     static let uk = RecorderShareStrings(
         caption: "Виберіть 1 або 6 годин. Фінальне відео стискається на цьому Mac, щоб уміститися в 100 МБ, та видаляється автоматично.",
-        privacyData: "Vorssaint надсилає лише готове відео із цього запису, включно зі збереженим аудіо та обраним терміном дії. Він не надсилає ваше ім’я, обліковий запис або ідентифікатор пристрою.",
+        privacyData: "Juno Island надсилає лише готове відео із цього запису, включно зі збереженим аудіо та обраним терміном дії. Він не надсилає ваше ім’я, обліковий запис або ідентифікатор пристрою.",
         privacyStorage: "Мережеві провайдери та сервіс нетривало обробляють вашу публічну IP-адресу для запобігання зловживанням. Відео та метадані посилання безповоротно видаляються, коли ви видаляєте посилання або спливає термін його дії. Сервіс не створює резервних копій.",
         privacyAccess: "Будь-хто з посиланням може переглядати, завантажувати, зберігати або передавати відео. Активні посилання доступні оператору сервісу для модерації зловживань. Діліться лише з тими, кому довіряєте.",
         compressing: "Стиснення для поширення…",

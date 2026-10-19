@@ -80,7 +80,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Fan %d",
         rpmFormat: "%d RPM",
         allowControl: "Allow fan control",
-        approvalCaption: "Allow Vorssaint in Login Items to use the protected fan controller.",
+        approvalCaption: "Allow Juno Island in Login Items to use the protected fan controller.",
         openSettings: "Open System Settings",
         noFans: "This Mac has no controllable fan.",
         unsupported: "Fan control is not available on this Mac.",
@@ -114,7 +114,7 @@ extension FanControlFeatureStrings {
         averageCPU: "Average CPU",
         hottestCPU: "Hottest CPU",
         hottestGPU: "Hottest GPU",
-        helperUnavailable: "The protected fan controller is unavailable. Allow Vorssaint in Login Items, then try again.",
+        helperUnavailable: "The protected fan controller is unavailable. Allow Juno Island in Login Items, then try again.",
         resumeAfterRestart: "Resume after restart or sleep"
     )
 
@@ -126,7 +126,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Ventoinha %d",
         rpmFormat: "%d RPM",
         allowControl: "Permitir controle",
-        approvalCaption: "Permita o Vorssaint nos Itens de Início para usar o controle protegido das ventoinhas.",
+        approvalCaption: "Permita o Juno Island nos Itens de Início para usar o controle protegido das ventoinhas.",
         openSettings: "Abrir Ajustes do Sistema",
         noFans: "Este Mac não tem ventoinha controlável.",
         unsupported: "O controle das ventoinhas não está disponível neste Mac.",
@@ -160,7 +160,7 @@ extension FanControlFeatureStrings {
         averageCPU: "Média da CPU",
         hottestCPU: "CPU mais quente",
         hottestGPU: "GPU mais quente",
-        helperUnavailable: "O controlador protegido das ventoinhas não está disponível. Permita o Vorssaint nos Itens de Início e tente novamente.",
+        helperUnavailable: "O controlador protegido das ventoinhas não está disponível. Permita o Juno Island nos Itens de Início e tente novamente.",
         resumeAfterRestart: "Retomar depois de reiniciar ou repousar"
     )
 
@@ -172,7 +172,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Fan %d",
         rpmFormat: "%d RPM",
         allowControl: "Fan denetimine izin ver",
-        approvalCaption: "Korumalı fan denetimini kullanmak için Giriş Öğeleri’nde Vorssaint’e izin verin.",
+        approvalCaption: "Korumalı fan denetimini kullanmak için Giriş Öğeleri’nde Juno Island’e izin verin.",
         openSettings: "Sistem Ayarları’nı Aç",
         noFans: "Bu Mac’te denetlenebilir fan yok.",
         unsupported: "Bu Mac’te fan denetimi kullanılamıyor.",
@@ -206,7 +206,7 @@ extension FanControlFeatureStrings {
         averageCPU: "Ortalama CPU",
         hottestCPU: "En sıcak CPU",
         hottestGPU: "En sıcak GPU",
-        helperUnavailable: "Korumalı fan denetleyicisi kullanılamıyor. Giriş Öğeleri’nde Vorssaint’e izin verip yeniden deneyin.",
+        helperUnavailable: "Korumalı fan denetleyicisi kullanılamıyor. Giriş Öğeleri’nde Juno Island’e izin verip yeniden deneyin.",
         resumeAfterRestart: "Yeniden başlatma veya uykudan sonra sürdür"
     )
 
@@ -218,7 +218,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Вентилятор %d",
         rpmFormat: "%d об/мин",
         allowControl: "Разрешить управление",
-        approvalCaption: "Разрешите Vorssaint в Объектах входа для защищённого управления вентиляторами.",
+        approvalCaption: "Разрешите Juno Island в Объектах входа для защищённого управления вентиляторами.",
         openSettings: "Открыть Системные настройки",
         noFans: "На этом Mac нет управляемого вентилятора.",
         unsupported: "Управление вентиляторами недоступно на этом Mac.",
@@ -252,7 +252,7 @@ extension FanControlFeatureStrings {
         averageCPU: "Средняя CPU",
         hottestCPU: "Самая горячая CPU",
         hottestGPU: "Самая горячая GPU",
-        helperUnavailable: "Защищённый контроллер вентиляторов недоступен. Разрешите Vorssaint в Объектах входа и повторите попытку.",
+        helperUnavailable: "Защищённый контроллер вентиляторов недоступен. Разрешите Juno Island в Объектах входа и повторите попытку.",
         resumeAfterRestart: "Возобновлять после перезагрузки или сна"
     )
 
@@ -264,7 +264,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Ventilador %d",
         rpmFormat: "%d RPM",
         allowControl: "Permitir control",
-        approvalCaption: "Permite Vorssaint en Ítems de inicio para usar el control protegido de los ventiladores.",
+        approvalCaption: "Permite Juno Island en Ítems de inicio para usar el control protegido de los ventiladores.",
         openSettings: "Abrir Ajustes del Sistema",
         noFans: "Este Mac no tiene ningún ventilador controlable.",
         unsupported: "El control de ventiladores no está disponible en este Mac.",
@@ -298,7 +298,7 @@ extension FanControlFeatureStrings {
         averageCPU: "Promedio de CPU",
         hottestCPU: "CPU más caliente",
         hottestGPU: "GPU más caliente",
-        helperUnavailable: "El controlador protegido de los ventiladores no está disponible. Permite Vorssaint en Ítems de inicio e inténtalo de nuevo.",
+        helperUnavailable: "El controlador protegido de los ventiladores no está disponible. Permite Juno Island en Ítems de inicio e inténtalo de nuevo.",
         resumeAfterRestart: "Reanudar tras reiniciar o salir del reposo"
     )
 
@@ -310,7 +310,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Ventilátor %d",
         rpmFormat: "%d ot./min",
         allowControl: "Povoliť ovládanie ventilátorov",
-        approvalCaption: "Povoľte Vorssaint v časti Položky a rozšírenia spúšťané pri prihlásení, aby mohol používať chránené ovládanie ventilátorov.",
+        approvalCaption: "Povoľte Juno Island v časti Položky a rozšírenia spúšťané pri prihlásení, aby mohol používať chránené ovládanie ventilátorov.",
         openSettings: "Otvoriť Systémové nastavenia",
         noFans: "Tento Mac nemá ovládateľný ventilátor.",
         unsupported: "Ovládanie ventilátorov nie je na tomto Macu dostupné.",
@@ -344,7 +344,7 @@ extension FanControlFeatureStrings {
         averageCPU: "Priemer CPU",
         hottestCPU: "Najteplejší CPU",
         hottestGPU: "Najteplejší GPU",
-        helperUnavailable: "Chránený ovládač ventilátorov nie je dostupný. Povoľte Vorssaint v časti Položky a rozšírenia spúšťané pri prihlásení a skúste to znova.",
+        helperUnavailable: "Chránený ovládač ventilátorov nie je dostupný. Povoľte Juno Island v časti Položky a rozšírenia spúšťané pri prihlásení a skúste to znova.",
         resumeAfterRestart: "Pokračovať po reštarte alebo spánku"
     )
 
@@ -356,7 +356,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Lüfter %d",
         rpmFormat: "%d U/min",
         allowControl: "Lüftersteuerung erlauben",
-        approvalCaption: "Erlaube Vorssaint unter Anmeldeobjekte, um die geschützte Lüftersteuerung zu verwenden.",
+        approvalCaption: "Erlaube Juno Island unter Anmeldeobjekte, um die geschützte Lüftersteuerung zu verwenden.",
         openSettings: "Systemeinstellungen öffnen",
         noFans: "Dieser Mac hat keinen steuerbaren Lüfter.",
         unsupported: "Die Lüftersteuerung ist auf diesem Mac nicht verfügbar.",
@@ -390,7 +390,7 @@ extension FanControlFeatureStrings {
         averageCPU: "CPU-Durchschnitt",
         hottestCPU: "Heißeste CPU",
         hottestGPU: "Heißeste GPU",
-        helperUnavailable: "Die geschützte Lüftersteuerung ist nicht verfügbar. Erlaube Vorssaint unter Anmeldeobjekte und versuche es erneut.",
+        helperUnavailable: "Die geschützte Lüftersteuerung ist nicht verfügbar. Erlaube Juno Island unter Anmeldeobjekte und versuche es erneut.",
         resumeAfterRestart: "Nach Neustart oder Ruhezustand fortsetzen"
     )
 
@@ -402,7 +402,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Ventilateur %d",
         rpmFormat: "%d tr/min",
         allowControl: "Autoriser le contrôle",
-        approvalCaption: "Autorisez Vorssaint dans Ouverture pour utiliser le contrôle protégé des ventilateurs.",
+        approvalCaption: "Autorisez Juno Island dans Ouverture pour utiliser le contrôle protégé des ventilateurs.",
         openSettings: "Ouvrir Réglages Système",
         noFans: "Ce Mac ne possède aucun ventilateur contrôlable.",
         unsupported: "Le contrôle des ventilateurs n’est pas disponible sur ce Mac.",
@@ -436,7 +436,7 @@ extension FanControlFeatureStrings {
         averageCPU: "Moyenne du CPU",
         hottestCPU: "CPU le plus chaud",
         hottestGPU: "GPU le plus chaud",
-        helperUnavailable: "Le contrôleur protégé des ventilateurs est indisponible. Autorisez Vorssaint dans Ouverture, puis réessayez.",
+        helperUnavailable: "Le contrôleur protégé des ventilateurs est indisponible. Autorisez Juno Island dans Ouverture, puis réessayez.",
         resumeAfterRestart: "Reprendre après un redémarrage ou la veille"
     )
 
@@ -448,7 +448,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Ventola %d",
         rpmFormat: "%d RPM",
         allowControl: "Consenti controllo",
-        approvalCaption: "Consenti Vorssaint in Elementi login per usare il controllo protetto delle ventole.",
+        approvalCaption: "Consenti Juno Island in Elementi login per usare il controllo protetto delle ventole.",
         openSettings: "Apri Impostazioni di Sistema",
         noFans: "Questo Mac non ha ventole controllabili.",
         unsupported: "Il controllo ventole non è disponibile su questo Mac.",
@@ -482,7 +482,7 @@ extension FanControlFeatureStrings {
         averageCPU: "Media CPU",
         hottestCPU: "CPU più calda",
         hottestGPU: "GPU più calda",
-        helperUnavailable: "Il controller protetto delle ventole non è disponibile. Consenti Vorssaint negli elementi di login e riprova.",
+        helperUnavailable: "Il controller protetto delle ventole non è disponibile. Consenti Juno Island negli elementi di login e riprova.",
         resumeAfterRestart: "Riprendi dopo il riavvio o lo stop"
     )
 
@@ -620,7 +620,7 @@ extension FanControlFeatureStrings {
         averageCPU: "CPU平均温度",
         hottestCPU: "CPU最高温度",
         hottestGPU: "GPU最高温度",
-        helperUnavailable: "受保护的风扇控制器不可用。请在登录项中允许 Vorssaint，然后重试。",
+        helperUnavailable: "受保护的风扇控制器不可用。请在登录项中允许 Juno Island，然后重试。",
         resumeAfterRestart: "重新启动或睡眠后恢复"
     )
 
@@ -666,7 +666,7 @@ extension FanControlFeatureStrings {
         averageCPU: "CPU平均溫度",
         hottestCPU: "CPU最高溫度",
         hottestGPU: "GPU最高溫度",
-        helperUnavailable: "受保護的風扇控制器無法使用。請在登入項目中允許 Vorssaint，然後再試一次。",
+        helperUnavailable: "受保護的風扇控制器無法使用。請在登入項目中允許 Juno Island，然後再試一次。",
         resumeAfterRestart: "重新開機或睡眠後恢復"
     )
 
@@ -712,7 +712,7 @@ extension FanControlFeatureStrings {
         averageCPU: "CPU平均溫度",
         hottestCPU: "CPU最高溫度",
         hottestGPU: "GPU最高溫度",
-        helperUnavailable: "受保護的風扇控制器無法使用。請在登入項目允許 Vorssaint，然後再試一次。",
+        helperUnavailable: "受保護的風扇控制器無法使用。請在登入項目允許 Juno Island，然後再試一次。",
         resumeAfterRestart: "重新啟動或睡眠後恢復"
     )
     static let uk = FanControlFeatureStrings(
@@ -723,7 +723,7 @@ extension FanControlFeatureStrings {
         fanNameFormat: "Вентилятор %d",
         rpmFormat: "%d об/хв",
         allowControl: "Дозволити керування вентиляторами",
-        approvalCaption: "Дозвольте Vorssaint у розділі «Автозапуск», щоб використовувати захищений контролер вентиляторів.",
+        approvalCaption: "Дозвольте Juno Island у розділі «Автозапуск», щоб використовувати захищений контролер вентиляторів.",
         openSettings: "Відкрити Системні параметри",
         noFans: "На цьому Mac немає вентилятора, яким можна керувати.",
         unsupported: "Керування вентиляторами недоступне на цьому Mac.",
@@ -757,7 +757,7 @@ extension FanControlFeatureStrings {
         averageCPU: "Середній CPU",
         hottestCPU: "Найгарячіший CPU",
         hottestGPU: "Найгарячіший GPU",
-        helperUnavailable: "Захищений контролер вентиляторів недоступний. Дозвольте Vorssaint у розділі «Автозапуск» і спробуйте знову.",
+        helperUnavailable: "Захищений контролер вентиляторів недоступний. Дозвольте Juno Island у розділі «Автозапуск» і спробуйте знову.",
         resumeAfterRestart: "Відновлювати після перезавантаження або сну"
     )
 }

@@ -42,17 +42,20 @@ for arg in "$@"; do
     esac
 done
 
+# Juno Island is an unofficial fork of Vorssaint. Per TRADEMARKS.md it carries
+# its own name, icon and bundle identity; the Swift side mirrors these ids in
+# Sources/Vorssaint/Core/AppInfo.swift and Services/FanControl/FanControlXPC.swift.
 if (( DEV )); then
-    APP_NAME="Vorssaint (Developer)"
-    EXECUTABLE="VorssaintDeveloper"
-    APP_BUNDLE_ID="com.vorssaint.utils.dev"
+    APP_NAME="Juno Island (Developer)"
+    EXECUTABLE="JunoIslandDeveloper"
+    APP_BUNDLE_ID="com.maurinrasi.junoisland.dev"
     BUILD_VARIANT_FLAGS=(-D VORSSAINT_DEVELOPMENT)
     APP_OPTIMIZATION_FLAGS=(-Onone)
     BUILD_CONFIGURATION="debug"
 else
-    APP_NAME="Vorssaint"
-    EXECUTABLE="Vorssaint"
-    APP_BUNDLE_ID="com.vorssaint.utils"
+    APP_NAME="Juno Island"
+    EXECUTABLE="JunoIsland"
+    APP_BUNDLE_ID="com.maurinrasi.junoisland"
     BUILD_VARIANT_FLAGS=()
     APP_OPTIMIZATION_FLAGS=(-O)
     BUILD_CONFIGURATION="release"
@@ -638,7 +641,10 @@ xattr -c -r build/AppIcon.iconset build/AppIcon.icns build/MenuBarIcon.png build
 ACTOOL_BIN="$(xcrun --find actool 2>/dev/null || true)"
 ICON_TMP="$(mktemp -d)"
 ADAPTIVE_SKIP=""
-if [[ -z "$ACTOOL_BIN" ]]; then
+if [[ ! -d "Resources/Brand/AppIcon.icon" ]]; then
+    # The fork ships no Icon Composer project; the Dock uses AppIcon.icns.
+    ADAPTIVE_SKIP="no adaptive icon catalog in this fork"
+elif [[ -z "$ACTOOL_BIN" ]]; then
     ADAPTIVE_SKIP="actool not found (adaptive icons need Xcode 26+)"
 else
     echo "▸ Compiling adaptive icon catalog…"
@@ -682,18 +688,18 @@ cp CHANGELOG.md "$STAGE/Contents/Resources/CHANGELOG.md"
 for lproj in Resources/*.lproj(N); do
     cp -R "$lproj" "$STAGE/Contents/Resources/"
 done
+# The fork's own identity (both variants): bundle id, names, executable and the
+# fan helper's launchd label, so it never collides with an installed Vorssaint.
+/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $APP_BUNDLE_ID" "$STAGE/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Set :CFBundleName $APP_NAME" "$STAGE/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $APP_NAME" "$STAGE/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Set :CFBundleExecutable $EXECUTABLE" "$STAGE/Contents/Info.plist"
+FAN_PLIST="$STAGE/Contents/Library/LaunchDaemons/$FAN_HELPER_ID.plist"
+/usr/libexec/PlistBuddy -c "Set :Label $FAN_HELPER_ID" "$FAN_PLIST"
+/usr/libexec/PlistBuddy -c "Set :BundleProgram Contents/Library/LaunchServices/$FAN_HELPER_ID" "$FAN_PLIST"
+/usr/libexec/PlistBuddy -c "Delete :MachServices:com.vorssaint.utils.fan-control" "$FAN_PLIST"
+/usr/libexec/PlistBuddy -c "Add :MachServices:$FAN_HELPER_ID bool true" "$FAN_PLIST"
 if (( DEV )); then
-    # A distinct identity so the Developer build installs and runs next to the
-    # official app, with its own permissions, preferences and login item.
-    /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $APP_BUNDLE_ID" "$STAGE/Contents/Info.plist"
-    /usr/libexec/PlistBuddy -c "Set :CFBundleName $APP_NAME" "$STAGE/Contents/Info.plist"
-    /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $APP_NAME" "$STAGE/Contents/Info.plist"
-    /usr/libexec/PlistBuddy -c "Set :CFBundleExecutable $EXECUTABLE" "$STAGE/Contents/Info.plist"
-    FAN_PLIST="$STAGE/Contents/Library/LaunchDaemons/$FAN_HELPER_ID.plist"
-    /usr/libexec/PlistBuddy -c "Set :Label $FAN_HELPER_ID" "$FAN_PLIST"
-    /usr/libexec/PlistBuddy -c "Set :BundleProgram Contents/Library/LaunchServices/$FAN_HELPER_ID" "$FAN_PLIST"
-    /usr/libexec/PlistBuddy -c "Delete :MachServices:com.vorssaint.utils.fan-control" "$FAN_PLIST"
-    /usr/libexec/PlistBuddy -c "Add :MachServices:$FAN_HELPER_ID bool true" "$FAN_PLIST"
     # Stamp the source commit + build time so the running dev app shows (in About)
     # exactly which code it was compiled from. Lets you verify it matches HEAD before
     # testing, instead of unknowingly running a stale build. Dev-only; never shipped.
