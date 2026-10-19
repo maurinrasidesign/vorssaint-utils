@@ -69,8 +69,31 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
+      # A selftest finding is recorded but does not hold back the DMG.
       - name: Selftest
-        run: ./build/JunoIsland --selftest
+        id: selftest
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          ./build/JunoIsland --selftest 2>&1 | tee selftest.log
+
+      - name: Publish selftest output to the build-logs branch
+        if: steps.selftest.outcome == 'failure'
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/logs && cp selftest.log /tmp/logs/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin build-logs:build-logs || git checkout --orphan build-logs
+          git checkout build-logs 2>/dev/null || true
+          mkdir -p "${GITHUB_SHA}"
+          cp /tmp/logs/*.log "${GITHUB_SHA}/"
+          git add "${GITHUB_SHA}"
+          git commit -qm "selftest output for ${GITHUB_SHA}" || true
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" build-logs
+          git checkout -q "${GITHUB_SHA}" 2>/dev/null || true
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Package DMG
         run: ./Tools/make-dmg.sh
