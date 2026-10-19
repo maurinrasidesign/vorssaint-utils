@@ -1419,6 +1419,9 @@ struct NotchQuickAccessConfiguration: Equatable, Codable {
     private var version = 1
     static let maximumPerSide = 3
     static let initial = Self(buttons: [
+        // The Pad sits beside the closed island from the first launch: one
+        // click left of the camera opens the prompt.
+        NotchQuickButton(id: UUID(uuidString: "00000000-0000-4000-8000-000000000006")!, action: .module(.pad), side: .left),
         NotchQuickButton(id: UUID(uuidString: "00000000-0000-4000-8000-000000000001")!, action: .explore, side: .left),
         NotchQuickButton(id: UUID(uuidString: "00000000-0000-4000-8000-000000000002")!, action: .module(.timer), side: .left),
         NotchQuickButton(id: UUID(uuidString: "00000000-0000-4000-8000-000000000003")!, action: .settings, side: .right),
