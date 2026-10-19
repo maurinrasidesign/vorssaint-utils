@@ -14,6 +14,15 @@ on:
         description: Also run the unit tests
         type: boolean
         default: false
+      runner:
+        description: Which GitHub-hosted Mac builds (the app is arm64 either way; an Intel host cross-compiles and skips the selftest)
+        type: choice
+        default: macos-15
+        options:
+          - macos-15
+          - macos-15-intel
+          - macos-14
+          - macos-26
 
 permissions:
   contents: write
@@ -25,7 +34,7 @@ concurrency:
 jobs:
   build:
     name: Build, selftest & package DMG
-    runs-on: macos-15
+    runs-on: ${{ github.event.inputs.runner || 'macos-15' }}
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +45,7 @@ jobs:
       - name: Toolchain
         run: |
           sw_vers
+          uname -m
           swiftc --version
           xcrun --sdk macosx --show-sdk-version
 
@@ -75,7 +85,11 @@ jobs:
         continue-on-error: true
         run: |
           set -o pipefail
-          ./build/JunoIsland --selftest 2>&1 | tee selftest.log
+          if [[ "$(uname -m)" == "arm64" ]]; then
+            ./build/JunoIsland --selftest 2>&1 | tee selftest.log
+          else
+            echo "selftest skipped on $(uname -m): the app is an arm64 binary" | tee selftest.log
+          fi
 
       - name: Publish selftest output to the build-logs branch
         if: steps.selftest.outcome == 'failure'

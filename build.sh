@@ -627,7 +627,13 @@ swiftc -O -target "$TARGET" -sdk "$SDK" "${SDK_COMPAT_FLAGS[@]}" "${BUILD_VARIAN
     Sources/Vorssaint/Services/FanControl/FanControlHardware.swift \
     Sources/FanControlHelper/main.swift \
     -o "build/$FAN_HELPER_ID"
-"build/$FAN_HELPER_ID" --selftest
+# The helper is an arm64 binary; a build on an Intel host (a GitHub runner
+# with free capacity) cannot run it and skips its selftest.
+if [[ "$(uname -m)" == "arm64" ]]; then
+    "build/$FAN_HELPER_ID" --selftest
+else
+    echo "  (fan helper selftest skipped on $(uname -m): the binary is arm64)"
+fi
 
 echo "▸ Compiling Now Playing adapter…"
 swiftc -O -target "$TARGET" -sdk "$SDK" "${SDK_COMPAT_FLAGS[@]}" -emit-library \
