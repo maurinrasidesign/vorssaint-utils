@@ -52,6 +52,11 @@ struct DockSettings: View {
                     spacesOrderCard
                         .settingsSectionAnchor(.spacesOrder, cornerRadius: 16)
                 }
+                if AppFeature.dockTuning.isAvailable {
+                    DockTuningCard()
+                        .settingsSectionAnchor(.dockTuning, cornerRadius: 16)
+                    DockIconsCard()
+                }
                 if AppFeature.dockPreview.isAvailable {
                     WindowPreviewsCard(sizeKey: DefaultsKey.previewSize,
                                        excludedAppsKey: DefaultsKey.windowPreviewExcludedApps)

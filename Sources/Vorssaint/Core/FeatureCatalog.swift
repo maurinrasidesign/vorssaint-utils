@@ -14,7 +14,7 @@ import Foundation
 /// primary control when no enable choice was saved before.
 enum AppFeature: String, CaseIterable {
     // Windows and Dock
-    case switcher, dockPreview, dockClick, windowMaximizer, windowLayout, autoQuit, spacesOrder
+    case switcher, dockPreview, dockClick, windowMaximizer, windowLayout, autoQuit, spacesOrder, dockTuning
     // Mouse and keyboard
     case scrollInverter, scrollHorizontal, focusFollowsMouse, smoothScroll, linearScroll, mouseAcceleration, mouseNavigation, mouseButtonShortcuts, middleClick,
          mouseClickDebounce, keyboardDebounce, textSnippets, superKey, quitWindowProtection
@@ -83,7 +83,7 @@ extension AppFeature {
         // Watch asks when an area is chosen and checks on every reading. The
         // companion uses no permission at all.
         case .screenOCR, .cleaningMode, .screenshot, .commandBar, .screenRecorder, .wallpaper, .notchWatch,
-             .notchMascot, .notchPad:
+             .notchMascot, .notchPad, .dockTuning:
             return false
         default:
             return true
@@ -101,7 +101,8 @@ extension AppFeature {
 
     var group: FeatureGroup {
         switch self {
-        case .switcher, .dockPreview, .dockClick, .windowMaximizer, .windowLayout, .autoQuit, .spacesOrder:
+        case .switcher, .dockPreview, .dockClick, .windowMaximizer, .windowLayout, .autoQuit, .spacesOrder,
+             .dockTuning:
             return .windowsDock
         case .scrollInverter, .scrollHorizontal, .focusFollowsMouse, .smoothScroll, .linearScroll, .mouseAcceleration, .mouseNavigation, .mouseButtonShortcuts, .middleClick,
              .keyboardDebounce, .textSnippets, .superKey, .quitWindowProtection, .mouseClickDebounce:
@@ -136,6 +137,7 @@ extension AppFeature {
         case .windowLayout: return "rectangle.3.group"
         case .autoQuit: return "xmark.rectangle"
         case .spacesOrder: return "rectangle.split.3x1"
+        case .dockTuning: return "slider.horizontal.below.rectangle"
         case .scrollInverter: return "arrow.up.arrow.down"
         case .scrollHorizontal: return "arrow.triangle.swap"
         case .focusFollowsMouse: return "cursorarrow.and.square.on.square.dashed"
@@ -241,6 +243,8 @@ extension AppFeature {
         case .windowMaximizer: return [DefaultsKey.windowMaximizeEnabled]
         case .autoQuit: return [DefaultsKey.autoQuitEnabled]
         case .spacesOrder: return [DefaultsKey.spacesOrderEnabled]
+        // Applied to the Dock the moment a value changes; nothing to switch on.
+        case .dockTuning: return []
         case .scrollInverter: return [DefaultsKey.scrollInverterEnabled,
                                       DefaultsKey.scrollInverterHorizontalEnabled]
         case .scrollHorizontal: return [DefaultsKey.scrollHorizontalEnabled]
@@ -352,7 +356,9 @@ extension AppFeature {
         case .notchNotifications: return [.accessibility]
         case .notchCalendar: return [.calendar]
         case .notch: return [.accessibility, .automationPlayback]
-        case .mouseAcceleration, .spacesOrder:
+        // Dock tuning writes the Dock's own preferences and restarts it,
+        // which asks no permission.
+        case .mouseAcceleration, .spacesOrder, .dockTuning:
             return []
         case .scrollInverter, .scrollHorizontal, .focusFollowsMouse, .smoothScroll, .linearScroll, .mouseNavigation, .mouseButtonShortcuts, .middleClick,
              .keyboardDebounce, .textSnippets, .superKey, .mouseClickDebounce,
@@ -485,7 +491,7 @@ extension AppFeature {
              .scratchpad, .commandBar, .screenRecorder,
              .notch, .notchCalendar, .notchNotifications, .notchGestures, .notchTimer, .notchAccessories,
              .notchLyrics, .notchQueue, .notchLiveEqualizer, .notchDownloads, .notchAgents, .notchWatch,
-             .notchPad, .notchMascot,
+             .notchPad, .notchMascot, .dockTuning,
              .monitorCPU, .monitorGPU, .monitorMemory, .monitorNetwork, .monitorDisk, .monitorPower,
              .connectedDevices:
             return true

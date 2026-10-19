@@ -272,6 +272,8 @@ enum SettingsDirectory {
                                                       s.dockClickMinimize, s.dockClickHide,
                                                       s.dockClickCycleWindows]),
                                         (.spacesOrder, [s.spacesOrderName]),
+                                        (.dockTuning, [FeatureStrings.dockTuning(language).title]
+                                            + FeatureStrings.dockTuning(language).searchKeywords),
                                        ]),
                 SettingsDirectoryItem(page: .windowLayout,
                                       title: FeatureStrings.windowLayout(language).title,
