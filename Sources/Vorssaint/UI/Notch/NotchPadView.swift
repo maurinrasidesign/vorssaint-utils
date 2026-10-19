@@ -21,6 +21,7 @@ struct NotchPadView: View {
     @State private var attachments: [URL] = []
     @State private var answers: [String: String] = [:]
     @State private var editor = EditorHandle()
+    @Environment(\.notchSettingsPreview) private var preview
     private var text: PadStrings { FeatureStrings.pad(l10n.language) }
 
     private final class EditorHandle {
@@ -44,7 +45,7 @@ struct NotchPadView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .notchBand(leading: { statusLabel }, trailing: { actions })
         .onAppear {
-            DispatchQueue.main.async { focusInput() }
+            if !preview { DispatchQueue.main.async { focusInput() } }
         }
         .onDisappear {
             if dictation.isListening { dictation.stop() }
@@ -451,8 +452,12 @@ struct NotchPadView: View {
         panel.allowsMultipleSelection = true
         panel.prompt = text.attach
         panel.allowedContentTypes = [UTType.item]
-        guard panel.runAboveIsland() == .OK else { return }
+        pad.modalInteractionActive = true
+        let response = panel.runAboveIsland()
+        pad.modalInteractionActive = false
+        guard response == .OK else { return }
         attachments += panel.urls.filter { !attachments.contains($0) }
+        DispatchQueue.main.async { focusInput() }
     }
 
     private func focusInput() {

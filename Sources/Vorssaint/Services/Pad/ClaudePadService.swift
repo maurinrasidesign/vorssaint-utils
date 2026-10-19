@@ -84,6 +84,9 @@ final class ClaudePadService: ObservableObject {
     @Published private(set) var lastAnswer: String?
     /// Set when the tool could not be found; cleared on the next successful start.
     @Published private(set) var lastError: String?
+    /// True while a file panel opened from the island runs, so a click in
+    /// it does not count as a click away from the island.
+    var modalInteractionActive = false
 
     var isRunning: Bool { process?.isRunning == true }
 
@@ -299,8 +302,7 @@ final class ClaudePadService: ObservableObject {
         }
         process.arguments = arguments
         process.currentDirectoryURL = workingDirectory
-        var environment = ProcessInfo.processInfo.environment
-        environment["PATH"] = resolution.path
+        var environment = resolution.environment
         environment["TERM"] = "dumb"
         process.environment = environment
 

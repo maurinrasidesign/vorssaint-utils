@@ -178,7 +178,8 @@ struct NotchPagePreview: View {
             }
         // The live area belongs to the island; the preview explains it instead.
         case .watch: NotchWatchView(size: size)
-        case .pad: NotchPadView(service: notch, size: size)
+        // A still, so the preview never starts a conversation or takes the keyboard.
+        case .pad: NotchPadStill()
         }
     }
 
@@ -200,6 +201,58 @@ struct NotchPagePreview: View {
 /// The scratchpad page without its editor: the current note, or the prompt a
 /// new one shows, and in the island's row the pads and the note's actions as
 /// the page puts them there.
+/// The Pad as a picture: its status pill and buttons in the row, the hint
+/// and an empty prompt field below. Nothing here talks to Claude Code.
+private struct NotchPadStill: View {
+    @ObservedObject private var l10n = L10n.shared
+
+    var body: some View {
+        let text = FeatureStrings.pad(l10n.language)
+        VStack(spacing: 6) {
+            Text(text.emptyHint)
+                .font(.system(size: 12))
+                .foregroundStyle(.white.opacity(0.45))
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .padding(.horizontal, 4)
+                .padding(.top, 4)
+            HStack(alignment: .bottom, spacing: 6) {
+                Text(text.placeholder)
+                    .font(.system(size: 13))
+                    .foregroundStyle(.white.opacity(0.35))
+                    .padding(.horizontal, 10)
+                    .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
+                    .modifier(NotchControlSurface(cornerRadius: 12, interactive: false))
+                Image(systemName: "arrow.up.circle.fill")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.55))
+                    .frame(width: 28, height: 28)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .notchBand(leading: {
+            HStack(spacing: 6) {
+                Circle().fill(.white.opacity(0.4)).frame(width: 7, height: 7)
+                Text("Juno")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.8))
+            }
+            .padding(.horizontal, 10)
+            .frame(height: 22)
+            .background(.white.opacity(0.06), in: Capsule())
+        }, trailing: {
+            HStack(spacing: 6) {
+                ForEach(["mic", "plus", "ellipsis"], id: \.self) { symbol in
+                    Image(systemName: symbol)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.55))
+                        .frame(width: 28, height: 28)
+                }
+            }
+        })
+    }
+}
+
 private struct NotchScratchpadStill: View {
     @ObservedObject private var pad = ScratchpadService.shared
     @ObservedObject private var l10n = L10n.shared

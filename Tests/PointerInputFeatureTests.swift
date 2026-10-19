@@ -241,7 +241,7 @@ enum PointerInputFeatureTests {
                     == Defaults.defaultMouseClickDebounceWindowMs,
                "mouse click debounce accepts any millisecond window from 5 to 100 ms")
         let clickDebounceServiceSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/MouseClickDebounce/MouseClickDebounceService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/MouseClickDebounce/MouseClickDebounceService.swift",
             encoding: .utf8)) ?? ""
         let clickDebounceServiceCode = clickDebounceServiceSource.components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -280,7 +280,7 @@ enum PointerInputFeatureTests {
                 && !clickDebounceServiceCode.contains("asyncAfter"),
                "legacy click filtering adds no timer or delayed release to healthy clicks")
         let featureRuntimeSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/App/FeatureRuntime.swift",
+            contentsOfFile: "Sources/Vorssaint/App/FeatureRuntime.swift",
             encoding: .utf8)) ?? ""
         suite.expect(featureRuntimeSource.contains(
             ".mouseClickDebounce: { MouseClickDebounceService.shared.syncWithPreferences() }"
@@ -1218,7 +1218,7 @@ enum PointerInputFeatureTests {
                 && SettingsBackupSupport.exportKeys().contains(DefaultsKey.focusFollowsMouseWaitForStop),
                "focus follows mouse keeps raising and waiting for the pointer to stop by default, and backs up both")
         let focusFollowsMouseServiceSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/FocusFollowsMouse/FocusFollowsMouseService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/FocusFollowsMouse/FocusFollowsMouseService.swift",
             encoding: .utf8)) ?? ""
         suite.expect(focusFollowsMouseServiceSource.contains(".leftMouseDragged")
                 && focusFollowsMouseServiceSource.contains(".rightMouseDragged")
@@ -2059,7 +2059,7 @@ enum PointerInputFeatureTests {
                "with nothing configured the drag claims no button away from navigation")
 
         let spacesServiceCode = ((try? String(
-            contentsOfFile: "Sources/Juno Island/Services/MouseButtons/MouseButtonShortcutService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/MouseButtons/MouseButtonShortcutService.swift",
             encoding: .utf8)) ?? "")
             .components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -2077,7 +2077,7 @@ enum PointerInputFeatureTests {
                "the drag asks with the system's own registered combinations, never a simulated gesture")
 
         let spaceBridgeCode = ((try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/SpaceWindowBridge.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/SpaceWindowBridge.swift",
             encoding: .utf8)) ?? "")
             .components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -2091,14 +2091,14 @@ enum PointerInputFeatureTests {
         // the down path must read that switch itself and hand the click back
         // whole: a mapping left behind is inert and its button is the app's.
         let spacesServiceLines = ((try? String(
-            contentsOfFile: "Sources/Juno Island/Services/MouseButtons/MouseButtonShortcutService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/MouseButtons/MouseButtonShortcutService.swift",
             encoding: .utf8)) ?? "").components(separatedBy: "\n")
         let isCodeLine: (String) -> Bool = {
             !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//")
         }
 
         let commandBarCatalogLines = ((try? String(
-            contentsOfFile: "Sources/Juno Island/Services/CommandBar/CommandBarCatalog.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/CommandBar/CommandBarCatalog.swift",
             encoding: .utf8)) ?? "").components(separatedBy: "\n")
         for (constructor, eligibility) in [
             ("killProcessEntries", "false"),
@@ -2150,10 +2150,10 @@ enum PointerInputFeatureTests {
         }
 
         let mouseSettingsViewLines = ((try? String(
-            contentsOfFile: "Sources/Juno Island/UI/Settings/MouseSettings.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/Settings/MouseSettings.swift",
             encoding: .utf8)) ?? "").components(separatedBy: "\n")
         let menuPanelLines = ((try? String(
-            contentsOfFile: "Sources/Juno Island/UI/MenuPanel/MenuPanelView.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/MenuPanel/MenuPanelView.swift",
             encoding: .utf8)) ?? "").components(separatedBy: "\n")
         let shortcutKey = "DefaultsKey.mouseButtonShortcutsEnabled"
         let spacesKey = "DefaultsKey.mouseSpacesGestureEnabled"
@@ -2269,7 +2269,7 @@ enum PointerInputFeatureTests {
             + "whose switch is not the shortcut switch")
 
         let mouseSettingsLines = ((try? String(
-            contentsOfFile: "Sources/Juno Island/UI/Settings/MouseButtonSettings.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/Settings/MouseButtonSettings.swift",
             encoding: .utf8)) ?? "").components(separatedBy: "\n")
         // Matched as the whole line, indentation included: at Section-child
         // depth no outer `if enabled` can quietly re-gate the list behind the
@@ -2657,7 +2657,7 @@ enum PointerInputFeatureTests {
         // The page is the only place a refused mapping is visible, so the
         // reason has to reach it and be spelled out there.
         let superKeySettingsSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/UI/Settings/SuperKeySettings.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/Settings/SuperKeySettings.swift",
             encoding: .utf8)) ?? ""
         let failureMark = superKeySettingsSource.range(of: "superKey.mappingFailure")
         let runningMark = superKeySettingsSource.range(of: "superKey.isRunning")
@@ -2722,7 +2722,7 @@ enum PointerInputFeatureTests {
         // one place guaranteed to run before every session tap that reads
         // the flags. The service file is not in this binary; pin the shape.
         let superKeyServiceSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/SuperKey/SuperKeyService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/SuperKey/SuperKeyService.swift",
             encoding: .utf8)) ?? ""
         let superKeyServiceCode = superKeyServiceSource
             .split(separator: "\n", omittingEmptySubsequences: false)
@@ -3188,7 +3188,7 @@ enum PointerInputFeatureTests {
         // way into the list, dropping a file onto it among them, has to go
         // through the same resolver as the sheet does.
         let pickerLines = ((try? String(
-            contentsOfFile: "Sources/Juno Island/UI/Settings/AppBundleList.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/Settings/AppBundleList.swift",
             encoding: .utf8)) ?? "").components(separatedBy: "\n")
         var resolvedAddSites: [String] = []
         var rawAddSites: [String] = []
@@ -3215,7 +3215,7 @@ enum PointerInputFeatureTests {
         // would hide the one component that differs. Neither picker is
         // compiled into this binary, so their shapes are pinned here.
         let appPickerLines = ((try? String(
-            contentsOfFile: "Sources/Juno Island/UI/Uninstall/AppPickerView.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/Uninstall/AppPickerView.swift",
             encoding: .utf8)) ?? "").components(separatedBy: "\n")
         let captionPickerLines = ["AppBundleList.swift": pickerLines,
                                   "AppPickerView.swift": appPickerLines]
@@ -3234,7 +3234,7 @@ enum PointerInputFeatureTests {
         var resolvedMatchSites: [String] = []
         var rawMatchSites: [String] = []
         let matcherLines = ((try? String(
-            contentsOfFile: "Sources/Juno Island/Services/MouseExceptions/MouseAppExceptions.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/MouseExceptions/MouseAppExceptions.swift",
             encoding: .utf8)) ?? "").components(separatedBy: "\n")
         for (index, line) in matcherLines.enumerated()
         where !line.trimmingCharacters(in: .whitespaces).hasPrefix("//")
@@ -3264,7 +3264,7 @@ enum PointerInputFeatureTests {
         for file in ["Services/MouseExceptions/MouseAppExceptionSupport.swift",
                      "Services/InstalledApps.swift",
                      "Core/Defaults.swift"] {
-            let ruleLines = ((try? String(contentsOfFile: "Sources/Juno Island/\(file)",
+            let ruleLines = ((try? String(contentsOfFile: "Sources/Vorssaint/\(file)",
                                           encoding: .utf8)) ?? "").components(separatedBy: "\n")
             if ruleLines.count <= 1 { slashRuleSites.append("\(file) unreadable") }
             for (index, line) in ruleLines.enumerated()
@@ -3720,35 +3720,35 @@ enum PointerInputFeatureTests {
         // session and asks before re-arming a tap the window server disabled.
         // Comments are stripped so prose naming the API cannot answer for it.
         let sessionActivitySource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/SessionActivity.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/SessionActivity.swift",
             encoding: .utf8)) ?? ""
         suite.expect(sessionActivitySource.contains("sessionDidResignActiveNotification")
                 && sessionActivitySource.contains("sessionDidBecomeActiveNotification"),
                "the session watcher follows both halves of a fast user switch")
         let mouseAccelerationSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/MouseAcceleration/MouseAccelerationService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/MouseAcceleration/MouseAccelerationService.swift",
             encoding: .utf8)) ?? ""
         suite.expect(mouseAccelerationSource.contains("SessionActivitySupport.isOnConsole("),
                "mouse acceleration shares the safe initial session-state fallback")
-        for tapOwner in ["Sources/Juno Island/Services/ScrollInverter.swift",
-                         "Sources/Juno Island/Services/SmoothScrollService.swift",
-                         "Sources/Juno Island/Services/MouseNavigation/MouseNavigationService.swift",
-                         "Sources/Juno Island/Services/MouseButtons/MouseButtonShortcutService.swift",
-                         "Sources/Juno Island/Services/MiddleClick/MiddleClickService.swift",
-                         "Sources/Juno Island/Services/QuitProtection/QuitProtectionService.swift",
-                         "Sources/Juno Island/Services/RadialMenu/RadialMenuService.swift",
-                         "Sources/Juno Island/Services/WindowLayout/WindowLayoutService.swift",
-                         "Sources/Juno Island/Services/WindowMaximizer.swift",
-                         "Sources/Juno Island/Services/Finder/FinderCutPaste.swift",
-                         "Sources/Juno Island/Services/Finder/FinderRenameService.swift",
-                         "Sources/Juno Island/Services/KeyboardDebounce/KeyboardDebounceService.swift",
-                         "Sources/Juno Island/Services/SuperKey/SuperKeyService.swift",
-                         "Sources/Juno Island/Services/ShortcutRecordingTap.swift",
-                         "Sources/Juno Island/Services/Switcher/AppSwitcher.swift",
-                         "Sources/Juno Island/Services/Snippets/TextSnippetService.swift",
-                         "Sources/Juno Island/Services/Audio/PreciseVolumeRollerService.swift",
-                         "Sources/Juno Island/Services/DockClick/DockClickService.swift",
-                         "Sources/Juno Island/Services/Display/BrightnessService.swift"] {
+        for tapOwner in ["Sources/Vorssaint/Services/ScrollInverter.swift",
+                         "Sources/Vorssaint/Services/SmoothScrollService.swift",
+                         "Sources/Vorssaint/Services/MouseNavigation/MouseNavigationService.swift",
+                         "Sources/Vorssaint/Services/MouseButtons/MouseButtonShortcutService.swift",
+                         "Sources/Vorssaint/Services/MiddleClick/MiddleClickService.swift",
+                         "Sources/Vorssaint/Services/QuitProtection/QuitProtectionService.swift",
+                         "Sources/Vorssaint/Services/RadialMenu/RadialMenuService.swift",
+                         "Sources/Vorssaint/Services/WindowLayout/WindowLayoutService.swift",
+                         "Sources/Vorssaint/Services/WindowMaximizer.swift",
+                         "Sources/Vorssaint/Services/Finder/FinderCutPaste.swift",
+                         "Sources/Vorssaint/Services/Finder/FinderRenameService.swift",
+                         "Sources/Vorssaint/Services/KeyboardDebounce/KeyboardDebounceService.swift",
+                         "Sources/Vorssaint/Services/SuperKey/SuperKeyService.swift",
+                         "Sources/Vorssaint/Services/ShortcutRecordingTap.swift",
+                         "Sources/Vorssaint/Services/Switcher/AppSwitcher.swift",
+                         "Sources/Vorssaint/Services/Snippets/TextSnippetService.swift",
+                         "Sources/Vorssaint/Services/Audio/PreciseVolumeRollerService.swift",
+                         "Sources/Vorssaint/Services/DockClick/DockClickService.swift",
+                         "Sources/Vorssaint/Services/Display/BrightnessService.swift"] {
             let source = (try? String(contentsOfFile: tapOwner, encoding: .utf8)) ?? ""
             suite.expect(!source.isEmpty, "\(tapOwner) reads back for its session-switch check")
             let code = source.components(separatedBy: "\n")
@@ -3806,14 +3806,14 @@ enum PointerInputFeatureTests {
         // waits for whatever this app is drawing or asking Accessibility,
         // which is felt as click lag in whatever app is in front.
         let pointerTapSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/PointerTapRunLoop.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/PointerTapRunLoop.swift",
             encoding: .utf8)) ?? ""
         suite.expect(pointerTapSource.contains("CFMachPortInvalidate"),
                "the pointer thread hands back the port of every tap it gives up")
         suite.expect(pointerTapSource.contains("qualityOfService = .userInteractive"),
                "the pointer thread is scheduled as input work")
-        for pointerTapOwner in ["Sources/Juno Island/Services/ScrollInverter.swift",
-                                "Sources/Juno Island/Services/MiddleClick/MiddleClickService.swift"] {
+        for pointerTapOwner in ["Sources/Vorssaint/Services/ScrollInverter.swift",
+                                "Sources/Vorssaint/Services/MiddleClick/MiddleClickService.swift"] {
             let source = (try? String(contentsOfFile: pointerTapOwner, encoding: .utf8)) ?? ""
             let code = source.components(separatedBy: "\n")
                 .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -3825,7 +3825,7 @@ enum PointerInputFeatureTests {
         }
 
         let mouseTapAppDelegateSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/App/AppDelegate.swift",
+            contentsOfFile: "Sources/Vorssaint/App/AppDelegate.swift",
             encoding: .utf8)) ?? ""
         suite.expect(mouseTapAppDelegateSource.contains("MouseButtonShortcutService.shared.suspend()"),
                "normal termination releases mouse-button tap state instead of waiting for a future Up")
@@ -3835,7 +3835,7 @@ enum PointerInputFeatureTests {
         suite.expect(accessibilitySink.contains(".quitWindowProtection"),
                "granting Accessibility starts quit protection without a relaunch")
         let smoothSchedulerSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/SmoothScrollService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/SmoothScrollService.swift",
             encoding: .utf8)) ?? ""
         let smoothSchedulerCode = smoothSchedulerSource.components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -3846,7 +3846,7 @@ enum PointerInputFeatureTests {
         suite.expect(steppedLoupeBypass.contains("stopGlide()"),
                "entering stepped magnifier zoom cancels the fast glide before passing the raw notch")
         let scrollInverterSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/ScrollInverter.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/ScrollInverter.swift",
             encoding: .utf8)) ?? ""
         for (name, source) in [("scroll inverter", scrollInverterSource),
                                ("smooth scroll", smoothSchedulerCode)] {
@@ -3882,7 +3882,7 @@ enum PointerInputFeatureTests {
         suite.expect(smoothSleep.contains("stopGlide()"),
                "smooth scrolling cannot carry a pre-sleep glide into the next wake")
         let cleaningModeSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/CleaningMode/CleaningModeManager.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/CleaningMode/CleaningModeManager.swift",
             encoding: .utf8)) ?? ""
         suite.expect(cleaningModeSource.contains("SessionActivity.shared.onChange")
                 && cleaningModeSource.contains("deactivate(restoreSuspendedFeatures: false)")

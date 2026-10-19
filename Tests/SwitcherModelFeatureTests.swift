@@ -132,15 +132,15 @@ enum SwitcherModelFeatureTests {
                 .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
                 .joined(separator: "\n")
         }
-        let switcher = code("Sources/Juno Island/Services/Switcher/AppSwitcher.swift")
+        let switcher = code("Sources/Vorssaint/Services/Switcher/AppSwitcher.swift")
         suite.expect(switcher.contains("CGEventType.scrollWheel.rawValue") && switcher.contains("case .scrollWheel:"),
                      "the switcher subscribes to and handles scroll-wheel events")
-        for path in ["Sources/Juno Island/Services/SmoothScrollService.swift",
-                     "Sources/Juno Island/Services/MouseButtons/MouseButtonShortcutService.swift"] {
+        for path in ["Sources/Vorssaint/Services/SmoothScrollService.swift",
+                     "Sources/Vorssaint/Services/MouseButtons/MouseButtonShortcutService.swift"] {
             suite.expect(code(path).contains("AppSwitcher.shared.scrollNavigationActive"),
                          "\(path) yields scrolling to the open switcher")
         }
-        suite.expect(!code("Sources/Juno Island/Services/ScrollInverter.swift").contains("AppSwitcher.shared.scrollNavigationActive"),
+        suite.expect(!code("Sources/Vorssaint/Services/ScrollInverter.swift").contains("AppSwitcher.shared.scrollNavigationActive"),
                      "scroll direction still transforms wheel events before they reach the open switcher")
     }
 
@@ -468,7 +468,7 @@ enum SwitcherModelFeatureTests {
         // scope must be assigned before the layout pass or a window-scoped
         // panel is sized for the grouped layout on its first frame.
         let switcherSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/AppSwitcher.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/AppSwitcher.swift",
             encoding: .utf8)) ?? ""
         // Ends on whatever declaration comes next rather than naming the
         // neighbour: a rename would find no separator, leave the slice running
@@ -503,7 +503,7 @@ enum SwitcherModelFeatureTests {
                                                                 windowRow: false),
                "App Switcher main shortcut steps through simple window rows without app grouping")
         let previewProviderCode = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/WindowPreviewProvider.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/WindowPreviewProvider.swift",
             encoding: .utf8)) ?? ""
         // The warm task itself may be detached (its image work must stay off
         // the main thread); what must never run on a shared task thread is the
@@ -627,7 +627,7 @@ enum SwitcherModelFeatureTests {
         // The bridge's window query cannot run here, so its answer must go
         // through that filter, and only on macOS 26 and later.
         let hiddenWithAppBody = ((try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/SpaceWindowBridge.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/SpaceWindowBridge.swift",
             encoding: .utf8)) ?? "")
             .components(separatedBy: "static func windowsHiddenWithApp(among windowIDs: [CGWindowID]) -> Set<CGWindowID>? {\n")
             .dropFirst().first?
@@ -883,7 +883,7 @@ enum SwitcherModelFeatureTests {
                && !embeddedWindow.isMinimizedForPlacement(treatHiddenAppsLikeMinimized: true),
                "hidden apps follow minimized-window placement only when selected, while actual minimized windows always follow it")
         let placementCode = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/WindowEnumerator.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/WindowEnumerator.swift",
             encoding: .utf8)) ?? ""
         suite.expect(placementCode.contains("forKey: DefaultsKey.switcherTreatHiddenAppsLikeMinimized")
                && placementCode.contains("item.isMinimizedForPlacement(treatHiddenAppsLikeMinimized: treatHiddenAppsLikeMinimized)"),
@@ -1444,7 +1444,7 @@ enum SwitcherModelFeatureTests {
             .prefix(24)).map(\.id) == ["right"],
                "windows on other monitors cannot exhaust the local display's entry limit")
         let enumeratorCode = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/WindowEnumerator.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/WindowEnumerator.swift",
             encoding: .utf8)) ?? ""
         let displayFilter = enumeratorCode.range(of: "SwitcherSupport.itemsOnDisplay(filtered,")
         let grouping = enumeratorCode.range(of: "groupedByApp(orderedPrimary)")
@@ -1899,7 +1899,7 @@ enum SwitcherModelFeatureTests {
         // gesture from an ordinary one -- which is the thing being fixed, so a
         // branch is what this guards against.
         let placeSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/WindowActivator.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/WindowActivator.swift",
             encoding: .utf8)) ?? ""
         let placeBody = (placeSource.components(separatedBy: "static func place(_ item: SwitcherItem")
             .last ?? "").components(separatedBy: "\n    @discardableResult").first ?? ""
@@ -1932,7 +1932,7 @@ enum SwitcherModelFeatureTests {
         // title both over the thumbnail and under it. In a panel every card
         // belongs to one app, so both said the same thing once per window.
         let dockPreviewCardSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/UI/Switcher/DockPreviewPanelView.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/Switcher/DockPreviewPanelView.swift",
             encoding: .utf8)) ?? ""
         let dockPreviewCardCode = dockPreviewCardSource
             .split(separator: "\n", omittingEmptySubsequences: false)
@@ -2468,7 +2468,7 @@ enum SwitcherModelFeatureTests {
         // These AppKit owners are not part of the pure-helper test binary, so
         // pin that neither caller can consume a parked status-item frame.
         let statusAnchorAppDelegateSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/App/AppDelegate.swift",
+            contentsOfFile: "Sources/Vorssaint/App/AppDelegate.swift",
             encoding: .utf8)) ?? ""
         let stripCommentLines: (String) -> String = {
             $0.split(separator: "\n", omittingEmptySubsequences: false)
@@ -2482,7 +2482,7 @@ enum SwitcherModelFeatureTests {
             .components(separatedBy: "ShelfService.shared.statusItemFrameProvider =").last ?? "")
             .components(separatedBy: "\n        }").first ?? "")
         let statusControllerSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/App/StatusItemController.swift",
+            contentsOfFile: "Sources/Vorssaint/App/StatusItemController.swift",
             encoding: .utf8)) ?? ""
         let statusHitTestCode = stripCommentLines((statusControllerSource
             .components(separatedBy: "func containsStatusItem(at screenPoint: NSPoint) -> Bool {").last ?? "")
@@ -2508,7 +2508,7 @@ enum SwitcherModelFeatureTests {
         suite.expect(popoverSetUpCode.contains("popover.hasFullSizeContent = PanelSurface.popoverHostsFullSizeContent"),
                "the panel is hosted across the whole popover, arrow band included, where AppKit supports it")
         let panelThemeSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/UI/Theme.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/Theme.swift",
             encoding: .utf8)) ?? ""
         // macOS 15 publishes the full-size safe area but leaves the view at its
         // content size in the frame's corner, so the popover grows and shows a
@@ -2539,7 +2539,7 @@ enum SwitcherModelFeatureTests {
                    && insetSurfaceCode.contains(".strokeBorder(PanelSurface.border(for: colorScheme)"),
                "an inset panel is a rounded, rimmed card inside the balloon")
         let panelViewSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/UI/MenuPanel/MenuPanelView.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/MenuPanel/MenuPanelView.swift",
             encoding: .utf8)) ?? ""
         let panelBodyCode: (String) -> String = { header in
             stripCommentLines((panelViewSource.components(separatedBy: header).last ?? "")
@@ -3398,7 +3398,7 @@ enum SwitcherModelFeatureTests {
         suite.expect(rightFrame.maxX < 1360,
                "Dock Preview right panel sits to the left of the Dock")
         let dockPreviewServiceSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/DockPreview/DockPreviewService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/DockPreview/DockPreviewService.swift",
             encoding: .utf8)) ?? ""
         let dockPreviewServiceCode = dockPreviewServiceSource
             .split(separator: "\n", omittingEmptySubsequences: false)
@@ -3453,12 +3453,12 @@ enum SwitcherModelFeatureTests {
         // Both panels show windows of the same kind, so a name too long for its
         // room behaves the same in each. One view, two callers, two widths.
         let scrollingTitleSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/UI/Switcher/ScrollingTitle.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/Switcher/ScrollingTitle.swift",
             encoding: .utf8)) ?? ""
         suite.expect(scrollingTitleSource.contains("struct ScrollingTitle: View"),
                "the scrolling name is one view, not a copy in each panel")
         let switcherCardSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/UI/Switcher/SwitcherView.swift",
+            contentsOfFile: "Sources/Vorssaint/UI/Switcher/SwitcherView.swift",
             encoding: .utf8)) ?? ""
         suite.expect(switcherCardSource.contains("ScrollingTitle(")
                && dockPreviewCardSource.contains("ScrollingTitle("),
@@ -4126,7 +4126,7 @@ enum SwitcherModelFeatureTests {
         // rather than the bare call it replaced. Asserted positively: the call
         // it must not use is named in the doc comment right above it.
         let dockClickSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/DockClick/DockClickService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/DockClick/DockClickService.swift",
             encoding: .utf8)) ?? ""
         suite.expect(dockClickSource.contains("ActivationHandoff.yield(to: app)"),
                "a Dock click restore yields this app's activation first")
@@ -4137,7 +4137,7 @@ enum SwitcherModelFeatureTests {
         // and every yield goes through it. A bare yield added on a new path
         // would bring the refused-handoff bug back on that path alone.
         let activationHandoffSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/ActivationHandoff.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/ActivationHandoff.swift",
             encoding: .utf8)) ?? ""
         let selfActivation = activationHandoffSource.range(of: "NSApp.activate(ignoringOtherApps: true)")
         let yieldOnward = activationHandoffSource.range(of: "NSApp.yieldActivation(to: app)")
@@ -4151,7 +4151,7 @@ enum SwitcherModelFeatureTests {
         // Only the activation the handoff caused stays out of the history; the
         // Dock icon, Settings and Vorssaint's own windows are real uses.
         let useTrackerSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/WindowUseTracker.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/WindowUseTracker.swift",
             encoding: .utf8)) ?? ""
         suite.expect(useTrackerSource.contains(
                    "pid == ProcessInfo.processInfo.processIdentifier && ActivationHandoff.isHandingOff"),
@@ -4506,7 +4506,7 @@ enum SwitcherModelFeatureTests {
                && DockPreviewSupport.mouseMoveSampleInterval < DockPreviewSupport.switchDelay,
                "Dock Preview samples high-rate mouse movement faster than hover intent")
         let dockPreviewSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/DockPreview/DockPreviewService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/DockPreview/DockPreviewService.swift",
             encoding: .utf8)) ?? ""
         suite.expect(dockPreviewSource.contains("DockClickSupport.dockOwnsPoint("),
                "Dock Preview does not open through fullscreen content covering the Dock")
@@ -5857,7 +5857,7 @@ enum SwitcherModelFeatureTests {
         // new in exactly the race the guard exists for. Comments are stripped
         // first, so the one explaining that lag cannot satisfy the check.
         let activatorSource = (try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/WindowActivator.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/WindowActivator.swift",
             encoding: .utf8)) ?? ""
         let activatorCode = activatorSource
             .components(separatedBy: "\n")
@@ -5892,7 +5892,7 @@ enum SwitcherModelFeatureTests {
         suite.expect(activatorCode.contains("activate(item, retry: retry, handoffSourcePID: handoffSourcePID)"),
                "activation by pid forwards its source only as a handoff")
         let dockPreviewActivationCode = ((try? String(
-            contentsOfFile: "Sources/Juno Island/Services/DockPreview/DockPreviewService.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/DockPreview/DockPreviewService.swift",
             encoding: .utf8)) ?? "")
             .components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -5908,7 +5908,7 @@ enum SwitcherModelFeatureTests {
                "Dock Preview passes the frontmost app only as a focus handoff source")
         let commandBarWindowActivate: String = {
             let source = ((try? String(
-                contentsOfFile: "Sources/Juno Island/Services/CommandBar/CommandBarCatalog.swift",
+                contentsOfFile: "Sources/Vorssaint/Services/CommandBar/CommandBarCatalog.swift",
                 encoding: .utf8)) ?? "")
                 .components(separatedBy: "\n")
                 .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -5928,7 +5928,7 @@ enum SwitcherModelFeatureTests {
                "Command Bar captures its handoff source before the activation beat")
         let commitSessionCode: String = {
             let source = ((try? String(
-                contentsOfFile: "Sources/Juno Island/Services/Switcher/AppSwitcher.swift",
+                contentsOfFile: "Sources/Vorssaint/Services/Switcher/AppSwitcher.swift",
                 encoding: .utf8)) ?? "")
                 .components(separatedBy: "\n")
                 .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
@@ -5975,7 +5975,7 @@ enum SwitcherModelFeatureTests {
         suite.expect(hopGuard != nil && hopRaise != nil && hopGuard!.lowerBound < hopRaise!,
                "the hop's arrival pass consults the retry guard before it raises the target")
         let spaceHopCode = ((try? String(
-            contentsOfFile: "Sources/Juno Island/Services/Switcher/SpaceHop.swift",
+            contentsOfFile: "Sources/Vorssaint/Services/Switcher/SpaceHop.swift",
             encoding: .utf8)) ?? "")
             .components(separatedBy: "\n")
             .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }

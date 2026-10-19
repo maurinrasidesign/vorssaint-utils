@@ -193,7 +193,7 @@ extension FeatureStrings {
             permissionDefault: "Ask before changes",
             permissionAcceptEdits: "Allow file edits in the working folder",
             model: "Model",
-            modelHint: "Leave empty for Claude Code's default, or e.g. “sonnet” or “opus”.",
+            modelHint: "Leave empty for Claude Code’s default, or e.g. “sonnet” or “opus”.",
             executable: "Path to claude",
             executableHint: "Only needed when the Pad cannot find Claude Code by itself.",
             executableFound: "Found",

@@ -229,6 +229,9 @@ final class NotchService: ObservableObject {
             || (expanded && MediaWorkspaceView.panelModalActive)
             || (expanded && selected == .downloads && NotchDownloadService.shared.isChoosingFolder)
             || (expanded && selected == .scratchpad && ScratchpadService.shared.modalInteractionActive)
+            || (expanded && !showingSections && selected == .pad
+                && (ClaudePadService.shared.modalInteractionActive || ClaudePadService.shared.pending != nil
+                    || PadDictation.shared.isListening))
             || (expanded && !showingSections && selected == .calendar && Permissions.shared.keepsCalendarPrompt)
             || (expanded && !showingSections && selected == .files && fileInteractionActive)
             || CameraPreviewService.shared.keepsNotchPermissionPrompt
@@ -1101,6 +1104,11 @@ final class NotchService: ObservableObject {
         // Paused while the island is away, the section still stops at once
         // when it is turned off.
         if !NotchAgentSupport.isEnabled() { AgentUsageService.shared.stop() }
+        // The Pad's conversation ends with its section; the hooks for the
+        // Terminal sessions follow the feature, not the island.
+        if !AppFeature.notchPad.isAvailable || !UserDefaults.standard.bool(forKey: DefaultsKey.notchPadEnabled) {
+            ClaudePadService.shared.stop()
+        }
         guard !suspended else {
             if session.canRunTimer { NotchTimerService.shared.syncWithPreferences() }
             else { NotchTimerService.shared.suspend() }
