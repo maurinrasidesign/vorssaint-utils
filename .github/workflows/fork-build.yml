@@ -35,7 +35,34 @@ jobs:
           xcrun --sdk macosx --show-sdk-version
 
       - name: Build
-        run: ./build.sh
+        run: |
+          set -o pipefail
+          echo "::add-matcher::.github/swiftc-matcher.json"
+          ./build.sh 2>&1 | tee build-output.log
+
+      # The full log lives behind a storage URL this project's tooling cannot
+      # reach, so the compiler's complaints are also pushed to a tiny
+      # build-logs branch, readable with plain git.
+      - name: Publish compiler errors to the build-logs branch
+        if: failure()
+        run: |
+          set -euo pipefail
+          { grep -nE "error:|warning: " build-output.log | grep -v "warning: " || true; } | head -300 > errors.txt
+          { grep -nE "warning: " build-output.log || true; } | head -200 > warnings.txt
+          { grep -B2 -A8 -E "error:" build-output.log || true; } | head -2500 > errors-context.txt
+          tail -40 build-output.log > tail.txt
+          mkdir -p /tmp/logs && cp errors.txt warnings.txt errors-context.txt tail.txt /tmp/logs/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan build-logs
+          git rm -rfq . || true
+          mkdir -p "${GITHUB_SHA}"
+          cp /tmp/logs/*.txt "${GITHUB_SHA}/"
+          git add "${GITHUB_SHA}"
+          git commit -qm "compiler output for ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" build-logs
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Selftest
         run: ./build/JunoIsland --selftest
