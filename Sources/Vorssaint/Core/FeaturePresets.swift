@@ -20,7 +20,8 @@ enum FeaturePreset: String, CaseIterable, Identifiable {
         guard !defaults.bool(forKey: DefaultsKey.hasOnboarded),
               defaults.integer(forKey: DefaultsKey.onboardingStep) == 0
         else { return }
-        let selected = FeaturePreset.essential.features
+        // Juno Island's own features ride along with whichever preset.
+        let selected = FeaturePreset.essential.features.union(JunoSetup.core)
         for feature in AppFeature.allCases {
             defaults.set(selected.contains(feature), forKey: feature.availabilityKey)
         }

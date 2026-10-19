@@ -754,8 +754,9 @@ struct AboutSettings: View {
                             .clipShape(Capsule())
                     }
                 }
-                if AppInfo.isDeveloperBuild, let commit = AppInfo.buildCommit {
-                    // Dev-only: which source commit this build came from. Never shipped.
+                if let commit = AppInfo.buildCommit {
+                    // Which source commit this build came from; every fork
+                    // build carries it, so an update can be told from the last.
                     Text(commit)
                         .font(.caption2.monospaced())
                         .foregroundStyle(.tertiary)

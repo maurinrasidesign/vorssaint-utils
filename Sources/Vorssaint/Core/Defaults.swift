@@ -48,6 +48,8 @@ enum DefaultsKey {
     static let showCountdown = "showCountdownInMenuBar"
     static let statusItemPlacementGeneration = "statusItemPlacementGeneration"
     static let hasOnboarded = "hasOnboarded"
+    /// The last `JunoSetup.version` that installed the fork's core features.
+    static let junoSetupVersion = "junoIsland.setupVersion"
     static let sleepDisabledFlag = "vorssDisabledSleep"   // internal guard for pmset disablesleep
     static let dimmedDisplaySavedBrightness = "vorssDimmedDisplaySavedBrightness" // internal guard for closed-lid screen dimming recovery
     static let scrollInverterEnabled = "scrollInverterEnabled"

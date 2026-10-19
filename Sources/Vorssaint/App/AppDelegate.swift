@@ -86,6 +86,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         // timer or shortcut. The onboarding can replace this set after the
         // person chooses what they actually want.
         FeaturePreset.prepareFirstRunAvailability()
+        // The fork's own: the island, the Pad, Juno and the Dock pages come
+        // installed and switched on, on a clean install and on an update.
+        JunoSetup.run()
 
         // Redo a launch at login registration the system lost. The stored
         // choice is the last thing the user expressed in the app; startup

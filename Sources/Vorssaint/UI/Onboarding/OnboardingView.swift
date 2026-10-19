@@ -37,7 +37,7 @@ struct OnboardingView: View {
             || defaults.integer(forKey: DefaultsKey.onboardingStep) >= 2
         let features = selectionWasApplied
             ? Set(AppFeature.allCases.filter(\.isAvailable))
-            : FeaturePreset.essential.features
+            : FeaturePreset.essential.features.union(JunoSetup.core)
         _selectedFeatures = State(initialValue: features)
         _selectedPreset = State(initialValue: selectionWasApplied ? nil : .essential)
     }

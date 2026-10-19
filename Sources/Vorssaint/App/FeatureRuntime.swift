@@ -142,7 +142,9 @@ final class FeatureRuntime: ObservableObject {
     /// Replaces the installed set after the first-run picker. It uses the same
     /// availability layer as the hub, so unselected features disappear without
     /// losing any of their settings.
-    func replaceAvailable(with selected: Set<AppFeature>, enabling keys: [String] = []) {
+    func replaceAvailable(with chosen: Set<AppFeature>, enabling keys: [String] = []) {
+        // Juno Island's core stays whatever preset or onboarding choice comes in.
+        let selected = chosen.union(JunoSetup.core)
         for key in keys {
             UserDefaults.standard.set(true, forKey: key)
         }

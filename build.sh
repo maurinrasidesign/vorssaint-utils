@@ -335,6 +335,7 @@ if (( TEST )); then
         Sources/Vorssaint/Services/Notch/NotchMusicCommandWriter.swift
         Sources/Vorssaint/Core/FeatureCatalog.swift
         Sources/Vorssaint/Core/FeaturePresets.swift
+        Sources/Vorssaint/App/JunoSetup.swift
         Sources/Vorssaint/Core/FeatureHubStrings.swift
         Sources/Vorssaint/Core/ShortcutSettingsStrings.swift
         Sources/Vorssaint/Core/SettingsBackupSupport.swift
@@ -702,15 +703,13 @@ FAN_PLIST="$STAGE/Contents/Library/LaunchDaemons/$FAN_HELPER_ID.plist"
 /usr/libexec/PlistBuddy -c "Set :BundleProgram Contents/Library/LaunchServices/$FAN_HELPER_ID" "$FAN_PLIST"
 /usr/libexec/PlistBuddy -c "Delete :MachServices:com.vorssaint.utils.fan-control" "$FAN_PLIST"
 /usr/libexec/PlistBuddy -c "Add :MachServices:$FAN_HELPER_ID bool true" "$FAN_PLIST"
-if (( DEV )); then
-    # Stamp the source commit + build time so the running dev app shows (in About)
-    # exactly which code it was compiled from. Lets you verify it matches HEAD before
-    # testing, instead of unknowingly running a stale build. Dev-only; never shipped.
-    SHA="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
-    [[ -n "$(git status --porcelain 2>/dev/null)" ]] && SHA="$SHA-dirty"
-    /usr/libexec/PlistBuddy -c "Add :VorssaintBuildCommit string '$SHA · $(date '+%Y-%m-%d %H:%M')'" "$STAGE/Contents/Info.plist"
-    echo "  stamped dev build: $SHA"
-fi
+# Stamp the source commit + build time so the running app shows (in About)
+# exactly which code it was compiled from. The fork ships every build with it,
+# since all its builds carry the same version number.
+SHA="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
+[[ -n "$(git status --porcelain 2>/dev/null)" ]] && SHA="$SHA-dirty"
+/usr/libexec/PlistBuddy -c "Add :VorssaintBuildCommit string '$SHA · $(date -u '+%Y-%m-%d %H:%M') UTC'" "$STAGE/Contents/Info.plist"
+echo "  stamped build: $SHA"
 FAN_HELPER_VERSION="$(
     export LC_ALL=C
     /usr/bin/shasum -a 256 \
