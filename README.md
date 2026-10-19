@@ -1,3 +1,12 @@
+> **Juno Island** is an unofficial fork of [Vorssaint](https://github.com/vorssaint/vorssaint-utils)
+> (GPL-3.0-or-later) by Maurin Rasi. It keeps everything Vorssaint does and adds the **Pad**:
+> a prompt field inside the Dynamic Island that talks to the local Claude Code CLI, so
+> questions, permission prompts and answers show up around the notch. Builds are unsigned
+> and published from this repository's [releases](../../releases); after dragging the app to
+> Applications, open it once with right-click › Open. Name, icon and bundle id are the
+> fork's own, as Vorssaint's [trademark notes](TRADEMARKS.md) ask; the Vorssaint name below
+> refers to the upstream project.
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/logo-dark.svg">
